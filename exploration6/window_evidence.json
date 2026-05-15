@@ -1,0 +1,32 @@
+{
+  "server_windows": {
+    "INTARIAN_PEPPER_ROOT": {
+      "SELL": 63,
+      "BUY": 7
+    },
+    "ASH_COATED_OSMIUM": {
+      "BUY": 61,
+      "SELL": 102
+    }
+  },
+  "day_windows": {
+    "ASH_COATED_OSMIUM": {
+      "BUY": 710,
+      "SELL": 971
+    },
+    "INTARIAN_PEPPER_ROOT": {
+      "SELL": 432,
+      "BUY": 189
+    }
+  },
+  "outside": {
+    "ASH_COATED_OSMIUM": {
+      "BUY": 2144,
+      "SELL": 2165
+    },
+    "INTARIAN_PEPPER_ROOT": {
+      "SELL": 1295,
+      "BUY": 414
+    }
+  }
+}

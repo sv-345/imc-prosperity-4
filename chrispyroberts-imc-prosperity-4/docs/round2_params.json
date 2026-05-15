@@ -1,0 +1,225 @@
+{
+  "round": 2,
+  "products": [
+    "ASH_COATED_OSMIUM",
+    "INTARIAN_PEPPER_ROOT"
+  ],
+  "days": [
+    -1,
+    0,
+    1
+  ],
+  "OSM": {
+    "fv": {
+      "model": "constant",
+      "fair_value": 10001,
+      "per_day_mean": {
+        "-1": 10000.825087631447,
+        "0": 10001.607371794871,
+        "1": 10000.205401884145
+      },
+      "tick_diff_sigma": 3.6887241745199586,
+      "tick_diff_acf1": -0.5010787274906663,
+      "n_ticks": 29947
+    },
+    "book": {
+      "n_ticks": 29947,
+      "bid_wall_offset": -10,
+      "ask_wall_offset": 9,
+      "bid_inner_offset": -8,
+      "ask_inner_offset": 8,
+      "wall_vol_bid": {
+        "min": 2,
+        "max": 30,
+        "mean": 19.876872246696035,
+        "n": 4540
+      },
+      "wall_vol_ask": {
+        "min": 2,
+        "max": 30,
+        "mean": 17.993558084603823,
+        "n": 4657
+      },
+      "inner_vol_bid": {
+        "min": 2,
+        "max": 30,
+        "mean": 17.621246587807097,
+        "n": 4396
+      },
+      "inner_vol_ask": {
+        "min": 2,
+        "max": 30,
+        "mean": 17.30122180451128,
+        "n": 4256
+      },
+      "bot3_bid_rate": 0.41189434667913316,
+      "bot3_ask_rate": 0.4115938157411427,
+      "bot3_vol": {
+        "min": 2,
+        "max": 30,
+        "mean": 16.12306931557055
+      },
+      "bot3_passive_frac": 0.9189713143307182,
+      "bot3_bid_offset_hist": {
+        "-7": 4077,
+        "-6": 3237,
+        "-5": 2516,
+        "-4": 1991,
+        "-3": 1460,
+        "-2": 1147,
+        "-1": 825,
+        "0": 595,
+        "1": 406,
+        "2": 317
+      },
+      "bot3_ask_offset_hist": {
+        "7": 3647,
+        "6": 3095,
+        "5": 2435,
+        "4": 2120,
+        "3": 1640,
+        "2": 1220,
+        "1": 928,
+        "0": 771,
+        "-1": 501,
+        "-2": 398
+      },
+      "wall_presence": {
+        "bid_count": 4540,
+        "ask_count": 4657,
+        "bid_presence_rate": 0.15160116205296023,
+        "ask_presence_rate": 0.15550806424683608
+      },
+      "inner_presence": {
+        "bid_count": 4396,
+        "ask_count": 4256,
+        "bid_presence_rate": 0.14679266704511304,
+        "ask_presence_rate": 0.14211774134303937
+      }
+    },
+    "taker": {
+      "n_trades": 1395,
+      "n_ticks": 29950,
+      "taker_rate_per_tick": 0.04597662771285476,
+      "multi_trade_tick_frac": 0.013071895424836602,
+      "qty_support": [
+        2,
+        10
+      ],
+      "qty_mean": 5.108960573476702,
+      "side_buy_frac": 0.49029850746268655,
+      "level_split": {
+        "inner": 0.5985663082437276,
+        "wall": 0.2028673835125448,
+        "bot3_price": 0.11971326164874552,
+        "other": 0.07885304659498207,
+        "n": 1395
+      }
+    }
+  },
+  "PEP": {
+    "fv": {
+      "model": "linear_drift",
+      "drift_per_tick": 0.10000060367601772,
+      "per_day_drift": {
+        "-1": 0.09999958408901219,
+        "0": 0.0999979138928209,
+        "1": 0.10000431304622008
+      },
+      "per_day_start": {
+        "-1": 10999.976266622112,
+        "0": 12000.012761893558,
+        "1": 12999.922049655686
+      },
+      "residual_sigma": 2.3671683797507126,
+      "n_ticks": 29953
+    },
+    "book": {
+      "n_ticks": 29953,
+      "bid_wall_offset": -10,
+      "ask_wall_offset": 10,
+      "bid_inner_offset": -6,
+      "ask_inner_offset": 7,
+      "wall_vol_bid": {
+        "min": 15,
+        "max": 25,
+        "mean": 20.03019592001616,
+        "n": 9902
+      },
+      "wall_vol_ask": {
+        "min": 15,
+        "max": 25,
+        "mean": 20.038415586802685,
+        "n": 10881
+      },
+      "inner_vol_bid": {
+        "min": 8,
+        "max": 12,
+        "mean": 10.020601868883821,
+        "n": 13591
+      },
+      "inner_vol_ask": {
+        "min": 8,
+        "max": 12,
+        "mean": 10.03118719245963,
+        "n": 14429
+      },
+      "bot3_bid_rate": 0.5441191199545955,
+      "bot3_ask_rate": 0.0749841418221881,
+      "bot3_vol": {
+        "min": 3,
+        "max": 12,
+        "mean": 9.775467117069566
+      },
+      "bot3_passive_frac": 0.9503325240156234,
+      "bot3_bid_offset_hist": {
+        "-6": 13591,
+        "-5": 2396,
+        "4": 341,
+        "3": 128,
+        "-2": 100,
+        "-3": 86,
+        "5": 21
+      },
+      "bot3_ask_offset_hist": {
+        "6": 1608,
+        "-4": 325,
+        "-3": 120,
+        "2": 117,
+        "3": 107,
+        "-5": 6
+      },
+      "wall_presence": {
+        "bid_count": 9902,
+        "ask_count": 10881,
+        "bid_presence_rate": 0.3305845825126031,
+        "ask_presence_rate": 0.3632691216238774
+      },
+      "inner_presence": {
+        "bid_count": 13591,
+        "ask_count": 14429,
+        "bid_presence_rate": 0.4537441992454846,
+        "ask_presence_rate": 0.48172136346943545
+      }
+    },
+    "taker": {
+      "n_trades": 996,
+      "n_ticks": 29950,
+      "taker_rate_per_tick": 0.03308848080133556,
+      "multi_trade_tick_frac": 0.005045408678102927,
+      "qty_support": [
+        3,
+        8
+      ],
+      "qty_mean": 5.053212851405623,
+      "side_buy_frac": 0.5057232049947971,
+      "level_split": {
+        "inner": 0.2901606425702811,
+        "wall": 0.013052208835341365,
+        "bot3_price": 0.4839357429718876,
+        "other": 0.21285140562248997,
+        "n": 996
+      }
+    }
+  }
+}

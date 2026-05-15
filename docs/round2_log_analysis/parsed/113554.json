@@ -1,0 +1,30 @@
+{
+  "fill_rate": 0.0,
+  "internal_submission_uuid": "1da4fac4-d7d0-49b0-b344-94a7af7a9acf",
+  "log_path": "/tmp/prosperity_logs/113554/115588.log",
+  "per_product": {
+    "ASH_COATED_OSMIUM": {
+      "largest_single_tick_loss": 0.0,
+      "per_tick_pnl": 0.0,
+      "pnl": 0.0,
+      "position_limit_hits": 998
+    },
+    "INTARIAN_PEPPER_ROOT": {
+      "largest_single_tick_loss": 0.0,
+      "per_tick_pnl": 0.0,
+      "pnl": 0.0,
+      "position_limit_hits": 999
+    }
+  },
+  "per_tick_pnl": 0.0,
+  "products": [
+    "ASH_COATED_OSMIUM",
+    "INTARIAN_PEPPER_ROOT"
+  ],
+  "run_id": "115588",
+  "submission_id": "113554",
+  "timestamp": 1776182053,
+  "total_fills": 0,
+  "total_pnl": 0.0,
+  "total_ticks": 1000
+}

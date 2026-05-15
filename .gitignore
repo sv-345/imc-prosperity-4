@@ -1,0 +1,28 @@
+# Private — do not publish
+discord-exports/
+discord-export.tgz
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Local-only working dirs
+tmp/
+.claude/
+.pytest_cache/
+
+# Rust build artifacts
+target/
+
+# Backtest run output (recreatable)
+runs/
+backtests/

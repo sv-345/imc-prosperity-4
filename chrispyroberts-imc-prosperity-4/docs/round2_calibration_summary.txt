@@ -1,0 +1,26 @@
+# Round 2 Calibration Summary
+
+## OSM (ASH_COATED_OSMIUM)
+
+FV model: constant = 10001  (per-day: {'-1': 10000.825087631447, '0': 10001.607371794871, '1': 10000.205401884145})
+Tick-diff sigma: 3.6887  ACF1: -0.5011
+Walls: bid@-10, ask@+9  (spread=19)
+Wall vol bid: {'min': 2, 'max': 30, 'mean': 19.876872246696035, 'n': 4540}
+Inners: bid@-8, ask@+8
+Inner vol bid: {'min': 2, 'max': 30, 'mean': 17.621246587807097, 'n': 4396}
+Bot-3 rate: bid=0.4119  ask=0.4116  passive_frac=0.919
+Taker: rate=0.0460  qty=[2, 10]  side_buy=0.490
+Taker level split: {'inner': 0.5985663082437276, 'wall': 0.2028673835125448, 'bot3_price': 0.11971326164874552, 'other': 0.07885304659498207, 'n': 1395}
+
+## PEP (INTARIAN_PEPPER_ROOT)
+
+FV model: linear drift  drift/tick=0.1000  resid_sigma=2.3672
+Per-day start: {'-1': 10999.976266622112, '0': 12000.012761893558, '1': 12999.922049655686}
+Per-day drift: {'-1': 0.09999958408901219, '0': 0.0999979138928209, '1': 0.10000431304622008}
+Walls: bid@-10, ask@+10  (spread=20)
+Wall vol bid: {'min': 15, 'max': 25, 'mean': 20.03019592001616, 'n': 9902}
+Inners: bid@-6, ask@+7
+Inner vol bid: {'min': 8, 'max': 12, 'mean': 10.020601868883821, 'n': 13591}
+Bot-3 rate: bid=0.5441  ask=0.0750  passive_frac=0.950
+Taker: rate=0.0331  qty=[3, 8]  side_buy=0.506
+Taker level split: {'inner': 0.2901606425702811, 'wall': 0.013052208835341365, 'bot3_price': 0.4839357429718876, 'other': 0.21285140562248997, 'n': 996}

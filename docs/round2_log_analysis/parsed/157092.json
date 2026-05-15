@@ -1,0 +1,50 @@
+{
+  "fill_rate": 0.134,
+  "internal_submission_uuid": "373d420c-93ab-44b9-8100-e537fd979b46",
+  "log_path": "/tmp/prosperity_logs/157092/159338.log",
+  "per_product": {
+    "ASH_COATED_OSMIUM": {
+      "adverse_move_fills_used": 86,
+      "adverse_move_lookahead_ticks": 5,
+      "avg_fill_size": 6,
+      "buy_qty": 255,
+      "largest_adverse_move_after_fill": -5.784883720930233,
+      "largest_single_tick_loss": -37.0625,
+      "net_qty": -6,
+      "num_buys": 45,
+      "num_fills": 86,
+      "num_sells": 41,
+      "per_tick_pnl": 3.1556875,
+      "pnl": 3155.6875,
+      "position_limit_hits": 0,
+      "sell_qty": 261
+    },
+    "INTARIAN_PEPPER_ROOT": {
+      "adverse_move_fills_used": 47,
+      "adverse_move_lookahead_ticks": 5,
+      "avg_fill_size": 5.104166666666667,
+      "buy_qty": 125,
+      "largest_adverse_move_after_fill": -5.042553191489362,
+      "largest_single_tick_loss": -1.90625,
+      "net_qty": 5,
+      "num_buys": 27,
+      "num_fills": 48,
+      "num_sells": 21,
+      "per_tick_pnl": 2.1115,
+      "pnl": 2111.5,
+      "position_limit_hits": 0,
+      "sell_qty": 120
+    }
+  },
+  "per_tick_pnl": 5.2671875,
+  "products": [
+    "ASH_COATED_OSMIUM",
+    "INTARIAN_PEPPER_ROOT"
+  ],
+  "run_id": "159338",
+  "submission_id": "157092",
+  "timestamp": 1776270313,
+  "total_fills": 134,
+  "total_pnl": 5267.1875,
+  "total_ticks": 1000
+}

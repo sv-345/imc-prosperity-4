@@ -1,0 +1,21 @@
+warning: The `tool.uv.dev-dependencies` field (used in `pyproject.toml`) is deprecated and will be removed in a future release; use `dependency-groups.dev` instead
+warning: `VIRTUAL_ENV=/Users/svelaga/Documents/IMC Prosperity/TUTORIAL_ROUND_1/.venv` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+warning: constant `DAYS` is never used
+  --> src/main.rs:27:7
+   |
+27 | const DAYS: [i32; 2] = ROUND0_DAYS;
+   |       ^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rust_simulator` (bin "rust_simulator") generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.07s
+     Running `target/release/rust_simulator --strategy '/Users/svelaga/Documents/IMC Prosperity/research_org/researchers/project_latent_fv_kalman/phase_b/b1_variants/V4_hybrid_gated.py' --sessions 100 --output '/Users/svelaga/Documents/IMC Prosperity/research_org/researchers/project_latent_fv_kalman/phase_b/b1_tmp/V4_hybrid_gated' --fv-mode simulate --trade-mode simulate --tomato-support quarter --seed 20260401 --python-bin '/Users/svelaga/Documents/IMC Prosperity/chrispyroberts-imc-prosperity-4/backtester/.venv/bin/python3' --write-session-limit 10 --actual-dir '/Users/svelaga/Documents/IMC Prosperity/chrispyroberts-imc-prosperity-4/data/round2' --ticks-per-day 10000 --round 2`
+Sessions: 100
+Mean total PnL: 99,808.00
+Std total PnL: 1,159.98
+Median total PnL: 99,849.05
+5%-95% range: 97,733.10 to 101,482.85
+  ASH_COATED_OSMIUM: mean=17,144.12  std=1,043.64  p05=15,130.35  pos>0 rate=100.00%
+  INTARIAN_PEPPER_ROOT: mean=82,663.88  std=450.60  p05=81,963.93  pos>0 rate=100.00%
+Saved Monte Carlo dashboard to /Users/svelaga/Documents/IMC Prosperity/research_org/researchers/project_latent_fv_kalman/phase_b/b1_tmp/V4_hybrid_gated/dashboard.json

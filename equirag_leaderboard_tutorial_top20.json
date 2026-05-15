@@ -1,0 +1,475 @@
+{
+    "top_entries": [
+        {
+            "rank": 1,
+            "percentile": 100.0,
+            "submission_id": "290dbdf1-ba81-4e77-8136-0ed861b9515f",
+            "alias": "Trader 290dbdf1",
+            "reported_total_pnl": 5618.90625,
+            "max_drawdown": 723.78125,
+            "trade_count": 204,
+            "total_volume": 1121,
+            "uploaded_at": "2026-04-07T04:45:23.931788Z",
+            "is_me": false
+        },
+        {
+            "rank": 2,
+            "percentile": 100.0,
+            "submission_id": "05f8a8dd-3bb7-41ba-ae0c-dba0b3f6ec84",
+            "alias": "Trader 05f8a8dd",
+            "reported_total_pnl": 5604.90625,
+            "max_drawdown": 681.625,
+            "trade_count": 222,
+            "total_volume": 1255,
+            "uploaded_at": "2026-04-10T16:03:33.140879Z",
+            "is_me": false
+        },
+        {
+            "rank": 3,
+            "percentile": 100.0,
+            "submission_id": "fb521004-2515-42af-89cd-0c0f1b349674",
+            "alias": "Trader fb521004",
+            "reported_total_pnl": 5600.90625,
+            "max_drawdown": 681.625,
+            "trade_count": 188,
+            "total_volume": 1027,
+            "uploaded_at": "2026-03-31T06:03:02.007040Z",
+            "is_me": false
+        },
+        {
+            "rank": 4,
+            "percentile": 99.9,
+            "submission_id": "963fa424-e30e-424f-bac1-fb8e04c11785",
+            "alias": "Trader 963fa424",
+            "reported_total_pnl": 5600.90625,
+            "max_drawdown": 625.8125,
+            "trade_count": 197,
+            "total_volume": 1051,
+            "uploaded_at": "2026-04-06T07:33:38.104284Z",
+            "is_me": false
+        },
+        {
+            "rank": 5,
+            "percentile": 99.9,
+            "submission_id": "c06656cd-4545-4781-ad9f-829e9b8e6578",
+            "alias": "Trader c06656cd",
+            "reported_total_pnl": 5584.90625,
+            "max_drawdown": 681.625,
+            "trade_count": 222,
+            "total_volume": 1247,
+            "uploaded_at": "2026-04-12T06:31:24.656146Z",
+            "is_me": false
+        },
+        {
+            "rank": 6,
+            "percentile": 99.9,
+            "submission_id": "10d3d99a-1410-47d4-ba19-723bc454d665",
+            "alias": "Trader 10d3d99a",
+            "reported_total_pnl": 5550.78125,
+            "max_drawdown": 681.625,
+            "trade_count": 196,
+            "total_volume": 1085,
+            "uploaded_at": "2026-03-29T11:23:53.703178Z",
+            "is_me": false
+        },
+        {
+            "rank": 7,
+            "percentile": 99.9,
+            "submission_id": "dc26f2bc-cb78-4264-9276-f3daa034a5dd",
+            "alias": "Trader dc26f2bc",
+            "reported_total_pnl": 5535.1875,
+            "max_drawdown": 760.234375,
+            "trade_count": 208,
+            "total_volume": 1129,
+            "uploaded_at": "2026-04-13T17:46:15.911878Z",
+            "is_me": false
+        },
+        {
+            "rank": 8,
+            "percentile": 99.8,
+            "submission_id": "7f255050-383a-40e5-aff0-37d9361aefa1",
+            "alias": "Trader 7f255050",
+            "reported_total_pnl": 5515.78125,
+            "max_drawdown": 722.4375,
+            "trade_count": 203,
+            "total_volume": 1109,
+            "uploaded_at": "2026-04-07T04:32:14.410816Z",
+            "is_me": false
+        },
+        {
+            "rank": 9,
+            "percentile": 99.8,
+            "submission_id": "6eaaa5e9-ed29-4e41-b6ca-738837497321",
+            "alias": "Trader 6eaaa5e9",
+            "reported_total_pnl": 5382.90625,
+            "max_drawdown": 624.078125,
+            "trade_count": 192,
+            "total_volume": 1015,
+            "uploaded_at": "2026-04-09T04:02:22.693090Z",
+            "is_me": false
+        },
+        {
+            "rank": 10,
+            "percentile": 99.8,
+            "submission_id": "de275130-7448-4709-a7b1-5d775c2752b6",
+            "alias": "Trader de275130",
+            "reported_total_pnl": 5328.78125,
+            "max_drawdown": 678.5,
+            "trade_count": 224,
+            "total_volume": 1387,
+            "uploaded_at": "2026-03-27T13:24:30.218076Z",
+            "is_me": false
+        },
+        {
+            "rank": 11,
+            "percentile": 99.8,
+            "submission_id": "608d1354-0caf-4ac8-b624-a9919ddd55ad",
+            "alias": "Trader 608d1354",
+            "reported_total_pnl": 5290.90625,
+            "max_drawdown": 421.375,
+            "trade_count": 221,
+            "total_volume": 1058,
+            "uploaded_at": "2026-03-29T02:43:22.045633Z",
+            "is_me": false
+        },
+        {
+            "rank": 12,
+            "percentile": 99.8,
+            "submission_id": "d8690c61-3736-4928-a648-f8d8c5d9835c",
+            "alias": "Trader d8690c61",
+            "reported_total_pnl": 5235.78125,
+            "max_drawdown": 687.625,
+            "trade_count": 225,
+            "total_volume": 1395,
+            "uploaded_at": "2026-03-22T08:35:00.579663Z",
+            "is_me": false
+        },
+        {
+            "rank": 13,
+            "percentile": 99.7,
+            "submission_id": "d9cf0378-616c-43b5-b79a-6ec0bb719fa0",
+            "alias": "Trader d9cf0378",
+            "reported_total_pnl": 4653.1875,
+            "max_drawdown": 446.95703125,
+            "trade_count": 171,
+            "total_volume": 831,
+            "uploaded_at": "2026-04-06T17:24:31.430599Z",
+            "is_me": false
+        },
+        {
+            "rank": 14,
+            "percentile": 99.7,
+            "submission_id": "e223fa39-62af-4144-9a11-8ab4136eaef8",
+            "alias": "Trader e223fa39",
+            "reported_total_pnl": 4484.171875,
+            "max_drawdown": 720.6875,
+            "trade_count": 145,
+            "total_volume": 755,
+            "uploaded_at": "2026-04-12T22:29:24.557683Z",
+            "is_me": false
+        },
+        {
+            "rank": 15,
+            "percentile": 99.7,
+            "submission_id": "6e4cfb05-0edc-4a83-8312-0daf9b87fae1",
+            "alias": "Trader 6e4cfb05",
+            "reported_total_pnl": 4419.78125,
+            "max_drawdown": 722.53125,
+            "trade_count": 181,
+            "total_volume": 1023,
+            "uploaded_at": "2026-03-25T20:27:29.295372Z",
+            "is_me": false
+        },
+        {
+            "rank": 16,
+            "percentile": 99.7,
+            "submission_id": "2fd4caa5-8693-4b82-bbea-fafd5b02b4cb",
+            "alias": "Trader 2fd4caa5",
+            "reported_total_pnl": 4414.046875,
+            "max_drawdown": 609.375,
+            "trade_count": 237,
+            "total_volume": 1139,
+            "uploaded_at": "2026-04-03T08:33:31.654273Z",
+            "is_me": false
+        },
+        {
+            "rank": 17,
+            "percentile": 99.7,
+            "submission_id": "660b5900-7f87-4eaf-be8e-6c82d092d4de",
+            "alias": "Trader 660b5900",
+            "reported_total_pnl": 4403.625,
+            "max_drawdown": 720.6875,
+            "trade_count": 132,
+            "total_volume": 685,
+            "uploaded_at": "2026-03-22T18:03:42.374139Z",
+            "is_me": false
+        },
+        {
+            "rank": 18,
+            "percentile": 99.6,
+            "submission_id": "50657105-8877-4129-81f3-4548f79f34d5",
+            "alias": "Trader 50657105",
+            "reported_total_pnl": 4353.78125,
+            "max_drawdown": 706.59375,
+            "trade_count": 132,
+            "total_volume": 874,
+            "uploaded_at": "2026-03-25T11:41:32.614970Z",
+            "is_me": false
+        },
+        {
+            "rank": 19,
+            "percentile": 99.6,
+            "submission_id": "e501d6c2-2fd1-4560-980a-a1983ffa07b0",
+            "alias": "Trader e501d6c2",
+            "reported_total_pnl": 4353.78125,
+            "max_drawdown": 712.53125,
+            "trade_count": 150,
+            "total_volume": 953,
+            "uploaded_at": "2026-03-25T20:00:06.671128Z",
+            "is_me": false
+        },
+        {
+            "rank": 20,
+            "percentile": 99.6,
+            "submission_id": "3430a02b-fe00-4930-8b83-e4aa26aa2970",
+            "alias": "Trader 3430a02b",
+            "reported_total_pnl": 4353.78125,
+            "max_drawdown": 706.59375,
+            "trade_count": 191,
+            "total_volume": 1294,
+            "uploaded_at": "2026-04-03T11:49:09.046581Z",
+            "is_me": false
+        }
+    ],
+    "my_entry": null,
+    "best_entry": null,
+    "distribution": {
+        "bins": [
+            {
+                "start_pnl": -653.650390625,
+                "end_pnl": -399.233984375,
+                "count": 11
+            },
+            {
+                "start_pnl": -399.233984375,
+                "end_pnl": -144.817578125,
+                "count": 20
+            },
+            {
+                "start_pnl": -144.817578125,
+                "end_pnl": 109.59882812499995,
+                "count": 98
+            },
+            {
+                "start_pnl": 109.59882812499995,
+                "end_pnl": 364.015234375,
+                "count": 115
+            },
+            {
+                "start_pnl": 364.015234375,
+                "end_pnl": 618.431640625,
+                "count": 145
+            },
+            {
+                "start_pnl": 618.431640625,
+                "end_pnl": 872.8480468749999,
+                "count": 170
+            },
+            {
+                "start_pnl": 872.8480468749999,
+                "end_pnl": 1127.264453125,
+                "count": 347
+            },
+            {
+                "start_pnl": 1127.264453125,
+                "end_pnl": 1381.680859375,
+                "count": 261
+            },
+            {
+                "start_pnl": 1381.680859375,
+                "end_pnl": 1636.097265625,
+                "count": 315
+            },
+            {
+                "start_pnl": 1636.097265625,
+                "end_pnl": 1890.513671875,
+                "count": 290
+            },
+            {
+                "start_pnl": 1890.513671875,
+                "end_pnl": 2144.930078125,
+                "count": 327
+            },
+            {
+                "start_pnl": 2144.930078125,
+                "end_pnl": 2399.346484375,
+                "count": 557
+            },
+            {
+                "start_pnl": 2399.346484375,
+                "end_pnl": 2653.7628906249997,
+                "count": 1112
+            },
+            {
+                "start_pnl": 2653.7628906249997,
+                "end_pnl": 2908.179296875,
+                "count": 511
+            },
+            {
+                "start_pnl": 2908.179296875,
+                "end_pnl": 3162.595703125,
+                "count": 116
+            },
+            {
+                "start_pnl": 3162.595703125,
+                "end_pnl": 3417.012109375,
+                "count": 35
+            },
+            {
+                "start_pnl": 3417.012109375,
+                "end_pnl": 3671.428515625,
+                "count": 17
+            },
+            {
+                "start_pnl": 3671.428515625,
+                "end_pnl": 3925.844921875,
+                "count": 12
+            },
+            {
+                "start_pnl": 3925.844921875,
+                "end_pnl": 4180.261328125,
+                "count": 10
+            },
+            {
+                "start_pnl": 4180.261328125,
+                "end_pnl": 4434.677734375,
+                "count": 18
+            }
+        ],
+        "full_range_bins": [
+            {
+                "start_pnl": -590990.734375,
+                "end_pnl": -561160.25234375,
+                "count": 1
+            },
+            {
+                "start_pnl": -561160.25234375,
+                "end_pnl": -531329.7703125,
+                "count": 0
+            },
+            {
+                "start_pnl": -531329.7703125,
+                "end_pnl": -501499.28828125,
+                "count": 1
+            },
+            {
+                "start_pnl": -501499.28828125,
+                "end_pnl": -471668.80625,
+                "count": 0
+            },
+            {
+                "start_pnl": -471668.80625,
+                "end_pnl": -441838.32421875,
+                "count": 0
+            },
+            {
+                "start_pnl": -441838.32421875,
+                "end_pnl": -412007.8421875,
+                "count": 0
+            },
+            {
+                "start_pnl": -412007.8421875,
+                "end_pnl": -382177.36015624995,
+                "count": 1
+            },
+            {
+                "start_pnl": -382177.36015624995,
+                "end_pnl": -352346.878125,
+                "count": 0
+            },
+            {
+                "start_pnl": -352346.878125,
+                "end_pnl": -322516.39609374997,
+                "count": 0
+            },
+            {
+                "start_pnl": -322516.39609374997,
+                "end_pnl": -292685.9140625,
+                "count": 0
+            },
+            {
+                "start_pnl": -292685.9140625,
+                "end_pnl": -262855.43203125,
+                "count": 0
+            },
+            {
+                "start_pnl": -262855.43203125,
+                "end_pnl": -233024.94999999995,
+                "count": 0
+            },
+            {
+                "start_pnl": -233024.94999999995,
+                "end_pnl": -203194.46796875,
+                "count": 0
+            },
+            {
+                "start_pnl": -203194.46796875,
+                "end_pnl": -173363.98593749997,
+                "count": 0
+            },
+            {
+                "start_pnl": -173363.98593749997,
+                "end_pnl": -143533.50390625,
+                "count": 0
+            },
+            {
+                "start_pnl": -143533.50390625,
+                "end_pnl": -113703.02187499998,
+                "count": 1
+            },
+            {
+                "start_pnl": -113703.02187499998,
+                "end_pnl": -83872.53984374995,
+                "count": 1
+            },
+            {
+                "start_pnl": -83872.53984374995,
+                "end_pnl": -54042.05781249993,
+                "count": 4
+            },
+            {
+                "start_pnl": -54042.05781249993,
+                "end_pnl": -24211.575781250023,
+                "count": 14
+            },
+            {
+                "start_pnl": -24211.575781250023,
+                "end_pnl": 5618.90625,
+                "count": 4571
+            }
+        ],
+        "min_pnl": -590990.734375,
+        "max_pnl": 5618.90625,
+        "display_min_pnl": -653.650390625,
+        "display_max_pnl": 4434.677734375,
+        "clipped_low_count": 93,
+        "clipped_high_count": 14
+    },
+    "stats": {
+        "count": 4594,
+        "percent_profitable": 95.6,
+        "median_pnl": 2210.225,
+        "mean_pnl": 1304.128,
+        "top_10_cutoff": 5328.781,
+        "p25_pnl": 1254.473,
+        "p75_pnl": 2526.555,
+        "std_dev_pnl": 13481.551,
+        "median_max_drawdown": 139.02,
+        "pnl_iqr": 1272.082,
+        "outliers_above": 14,
+        "outliers_below": 93
+    },
+    "tracked_entry_count": 4594,
+    "verified_submission_count": 5541,
+    "unique_exact_log_count": 4597
+}

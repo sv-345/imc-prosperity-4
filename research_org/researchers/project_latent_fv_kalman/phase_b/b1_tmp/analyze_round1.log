@@ -1,0 +1,44 @@
+
+=== Baseline (V0) ===
+  n=100  mean_total=99,778.66
+  day -1: n=34  mean=100,123.68  std=1,083.34
+  day +0: n=33  mean=99,665.68  std=1,309.10
+  day +1: n=33  mean=99,536.15  std=1,232.39
+
+=== Variant V1_full_kalman ===
+  total: mean_diff_boot=-528.31  CI_boot=[-655.35,-397.62]  mean_diff_anal=-528.31  CI_anal=[-657.20,-399.43]  se=64.96
+  total per 1k-tick: mean=-52.83  CI=[-65.72,-39.94]  (threshold +150)
+  osm: mean_diff=-653.19  CI=[-762.43,-543.95]
+  pep: mean_diff=+124.88  CI=[+54.30,+195.45]
+  day -1: n=34  mean_diff=-506.22  CI=[-667.48,-344.96]
+  day +0: n=33  mean_diff=-672.47  CI=[-940.61,-404.33]
+  day +1: n=33  mean_diff=-406.92  CI=[-634.47,-179.37]
+
+=== Variant V2_osm_only_kalman ===
+  total: mean_diff_boot=-653.19  CI_boot=[-768.67,-550.99]  mean_diff_anal=-653.19  CI_anal=[-762.43,-543.95]  se=55.06
+  total per 1k-tick: mean=-65.32  CI=[-76.24,-54.39]  (threshold +150)
+  osm: mean_diff=-653.19  CI=[-762.43,-543.95]
+  pep: mean_diff=+0.00  CI=[+0.00,+0.00]
+  day -1: n=34  mean_diff=-592.18  CI=[-742.26,-442.09]
+  day +0: n=33  mean_diff=-816.76  CI=[-1,057.91,-575.61]
+  day +1: n=33  mean_diff=-552.48  CI=[-709.91,-395.06]
+
+=== Variant V3_confidence_band ===
+  total: mean_diff_boot=-527.23  CI_boot=[-652.34,-397.13]  mean_diff_anal=-527.23  CI_anal=[-655.00,-399.47]  se=64.39
+  total per 1k-tick: mean=-52.72  CI=[-65.50,-39.95]  (threshold +150)
+  osm: mean_diff=-652.11  CI=[-759.89,-544.33]
+  pep: mean_diff=+124.88  CI=[+54.30,+195.45]
+  day -1: n=34  mean_diff=-506.22  CI=[-667.48,-344.96]
+  day +0: n=33  mean_diff=-669.20  CI=[-932.45,-405.94]
+  day +1: n=33  mean_diff=-406.92  CI=[-634.47,-179.37]
+
+=== Variant V4_hybrid_gated ===
+  total: mean_diff_boot=-574.01  CI_boot=[-661.83,-475.97]  mean_diff_anal=-574.01  CI_anal=[-667.24,-480.79]  se=46.98
+  total per 1k-tick: mean=-57.40  CI=[-66.72,-48.08]  (threshold +150)
+  osm: mean_diff=-698.79  CI=[-757.31,-640.27]
+  pep: mean_diff=+124.78  CI=[+55.11,+194.44]
+  day -1: n=34  mean_diff=-669.31  CI=[-796.99,-541.63]
+  day +0: n=33  mean_diff=-557.74  CI=[-729.65,-385.84]
+  day +1: n=33  mean_diff=-492.10  CI=[-672.63,-311.57]
+
+Wrote summary to /Users/svelaga/Documents/IMC Prosperity/research_org/researchers/project_latent_fv_kalman/phase_b/b1_mc_results/_summary.csv

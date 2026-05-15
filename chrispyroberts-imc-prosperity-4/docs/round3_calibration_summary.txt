@@ -1,0 +1,87 @@
+# Round 3 Calibration Summary
+
+Day-TTE mapping: {0: 0.021917808219178082, 1: 0.019178082191780823, 2: 0.01643835616438356}
+Live TTE at R3 start: 0.01370 yr (= 5 days)
+
+## HYDROGEL_PACK
+
+FV model: mean-reverting around 9991
+  per-day mean: {'0': 9990.9621, '1': 9992.0551, '2': 9989.4034}
+  tick-diff sigma: 2.1698  ACF1(Δmid): -0.1291
+Walls: bid@-11, ask@+11  spread=22
+  wall vol bid: {'min': 10, 'max': 30, 'mean': 24.927247229443154, 'n': 29236}
+  wall vol ask: {'min': 20, 'max': 30, 'mean': 25.024026197862806, 'n': 29010}
+Inners: bid@-8, ask@+8
+  inner vol bid: {'min': 10, 'max': 15, 'mean': 12.48975613214235, 'n': 28212}
+  inner vol ask: {'min': 10, 'max': 29, 'mean': 12.490008384572386, 'n': 28624}
+Bot-3: bid_rate=0.0596  ask_rate=0.0330  passive_frac=1.000
+  bid offset hist: {-7: 803, -4: 715, -6: 502, -3: 275, -5: 9}
+  ask offset hist: {4: 765, 7: 454, 5: 225, 6: 14}
+Taker: rate=0.0337  qty=[2, 6]  mean_qty=4.04  side_buy=0.519
+  qty histogram (top 10): {5: 212, 6: 205, 4: 202, 3: 198, 2: 193}
+
+## VELVETFRUIT_EXTRACT
+
+FV model: mean-reverting around 5250
+  per-day mean: {'0': 5246.51025, '1': 5248.3919, '2': 5255.39215}
+  tick-diff sigma: 1.1312  ACF1(Δmid): -0.1585
+Walls: bid@-3, ask@+4  spread=7
+  wall vol bid: {'min': 5, 'max': 75, 'mean': 39.18256937590378, 'n': 43567}
+  wall vol ask: {'min': 15, 'max': 75, 'mean': 39.18599150304283, 'n': 43545}
+Inners: bid@-3, ask@+4
+  inner vol bid: {'min': 15, 'max': 75, 'mean': 44.99591169255928, 'n': 20791}
+  inner vol ask: {'min': 15, 'max': 75, 'mean': 39.61561483409239, 'n': 15370}
+Bot-3: bid_rate=1.0000  ask_rate=1.0000  passive_frac=1.000
+  bid offset hist: {-2: 22776, -3: 20791, -1: 2195, 0: 178}
+  ask offset hist: {3: 28175, 2: 1228, 1: 1192}
+Taker: rate=0.0454  qty=[3, 15]  mean_qty=6.03  side_buy=0.569
+  qty histogram (top 10): {8: 233, 7: 224, 5: 223, 6: 212, 3: 190, 4: 189, 10: 29, 9: 23, 13: 13, 12: 11}
+
+## VEV (call vouchers on VELVETFRUIT_EXTRACT)
+
+Strikes: [4000, 4500, 5000, 5100, 5200, 5300, 5400, 5500, 6000, 6500]
+Active (fit): [5000, 5100, 5200, 5300, 5400, 5500]
+Pinned (min-tick): [6000, 6500]
+
+### Per-strike IV (days averaged with correct per-day TTE)
+Strike   IV_d0   IV_d1   IV_d2  IV_mean     std
+  5000  0.2348  0.2336  0.2349   0.2344 0.00070
+  5100  0.2373  0.2303  0.2277   0.2318 0.00494
+  5200  0.2329  0.2364  0.2337   0.2343 0.00184
+  5300  0.2329  0.2392  0.2383   0.2368 0.00344
+  5400  0.2227  0.2220  0.2217   0.2221 0.00054
+  5500  0.2390  0.2414  0.2422   0.2409 0.00163
+
+### Per-strike book + taker (active)
+VEV_5000: walls -4/+5  inners -3/+4
+  wall_vol b/a: 18.8/18.5  inner_vol b/a: 17.1/18.0
+  bot3 rates b/a: 0.909/0.539  passive_frac: 0.997
+  taker: rate=0.0000  qty_support=[1, 1]  side_buy=1.000
+VEV_5100: walls -4/+4  inners -2/+2
+  wall_vol b/a: 19.6/18.9  inner_vol b/a: 19.3/19.4
+  bot3 rates b/a: 0.473/0.318  passive_frac: 0.925
+  taker: rate=0.0000  qty_support=[1, 1]  side_buy=1.000
+VEV_5200: walls -4/+4  inners -2/+2
+  wall_vol b/a: 22.5/21.5  inner_vol b/a: 21.3/22.7
+  bot3 rates b/a: 0.518/0.473  passive_frac: 0.692
+  taker: rate=0.0006  qty_support=[1, 5]  side_buy=0.056
+VEV_5300: walls -4/+4  inners -2/+2
+  wall_vol b/a: 19.7/20.0  inner_vol b/a: 20.2/19.4
+  bot3 rates b/a: 0.566/0.547  passive_frac: 0.630
+  taker: rate=0.0040  qty_support=[1, 5]  side_buy=0.008
+VEV_5400: walls -2/+4  inners -2/+2
+  wall_vol b/a: 21.6/21.3  inner_vol b/a: 21.8/21.4
+  bot3 rates b/a: 0.644/0.638  passive_frac: 0.555
+  taker: rate=0.0075  qty_support=[2, 5]  side_buy=0.000
+VEV_5500: walls -1/+2  inners -1/+2
+  wall_vol b/a: 22.2/22.1  inner_vol b/a: 22.2/22.1
+  bot3 rates b/a: 0.971/0.766  passive_frac: 0.814
+  taker: rate=0.0089  qty_support=[2, 5]  side_buy=0.000
+
+### Pinned-strike observations
+VEV_6000: bid_price_observed=[0]  ask_price_observed=[1]
+  bid_vol_mean=22.5  ask_vol_mean=22.5
+  taker: n_trades=284 (over 30000 ticks)
+VEV_6500: bid_price_observed=[0]  ask_price_observed=[1]
+  bid_vol_mean=15.5  ask_vol_mean=15.5
+  taker: n_trades=284 (over 30000 ticks)

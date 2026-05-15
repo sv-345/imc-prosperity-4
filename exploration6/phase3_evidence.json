@@ -1,0 +1,350 @@
+{
+  "-1": {
+    "totals": {
+      "PHASE2_BOOK": {
+        "fills": 355,
+        "qty": 1860,
+        "notional": 19358299.0
+      },
+      "PHASE3_TAPE": {
+        "fills": 573,
+        "qty": 2856,
+        "notional": 29800347.0
+      }
+    },
+    "per_product": {
+      "ASH_COATED_OSMIUM": {
+        "PHASE2_BOOK": {
+          "buy_qty": 744,
+          "sell_qty": 591,
+          "fills": 264
+        },
+        "PHASE3_TAPE": {
+          "buy_qty": 979,
+          "sell_qty": 1074,
+          "fills": 404
+        }
+      },
+      "INTARIAN_PEPPER_ROOT": {
+        "PHASE2_BOOK": {
+          "buy_qty": 525,
+          "sell_qty": 0,
+          "fills": 91
+        },
+        "PHASE3_TAPE": {
+          "buy_qty": 179,
+          "sell_qty": 624,
+          "fills": 169
+        }
+      }
+    },
+    "windows": {
+      "0": {
+        "PHASE3_TAPE": 257,
+        "PHASE2_BOOK": 285
+      },
+      "1": {
+        "PHASE2_BOOK": 86,
+        "PHASE3_TAPE": 203
+      },
+      "2": {
+        "PHASE3_TAPE": 303,
+        "PHASE2_BOOK": 179
+      },
+      "3": {
+        "PHASE3_TAPE": 353,
+        "PHASE2_BOOK": 163
+      },
+      "4": {
+        "PHASE2_BOOK": 171,
+        "PHASE3_TAPE": 315
+      },
+      "5": {
+        "PHASE3_TAPE": 237,
+        "PHASE2_BOOK": 198
+      },
+      "6": {
+        "PHASE3_TAPE": 335,
+        "PHASE2_BOOK": 189
+      },
+      "7": {
+        "PHASE3_TAPE": 318,
+        "PHASE2_BOOK": 212
+      },
+      "8": {
+        "PHASE2_BOOK": 183,
+        "PHASE3_TAPE": 229
+      },
+      "9": {
+        "PHASE2_BOOK": 194,
+        "PHASE3_TAPE": 306
+      }
+    },
+    "tape_counts": {
+      "ASH_COATED_OSMIUM": {
+        "n": 459,
+        "qty": 2348
+      },
+      "INTARIAN_PEPPER_ROOT": {
+        "n": 331,
+        "qty": 1669
+      }
+    },
+    "misses": {
+      "ASH_COATED_OSMIUM": {
+        "ask_misses": 250,
+        "bid_misses": 253,
+        "ask_miss_qty": 1261,
+        "bid_miss_qty": 1312
+      },
+      "INTARIAN_PEPPER_ROOT": {
+        "ask_misses": 208,
+        "bid_misses": 266,
+        "ask_miss_qty": 1045,
+        "bid_miss_qty": 1332
+      }
+    },
+    "phase3_price_vs_ours": {
+      "<0": 568,
+      "==0": 5,
+      ">0": 0
+    },
+    "pnl": 101308.0,
+    "per_product_pnl": {
+      "INTARIAN_PEPPER_ROOT": 81932.0,
+      "ASH_COATED_OSMIUM": 19376.0
+    }
+  },
+  "0": {
+    "totals": {
+      "PHASE2_BOOK": {
+        "fills": 339,
+        "qty": 1800,
+        "notional": 19231226.0
+      },
+      "PHASE3_TAPE": {
+        "fills": 576,
+        "qty": 2866,
+        "notional": 30703193.0
+      }
+    },
+    "per_product": {
+      "ASH_COATED_OSMIUM": {
+        "PHASE2_BOOK": {
+          "buy_qty": 651,
+          "sell_qty": 650,
+          "fills": 254
+        },
+        "PHASE3_TAPE": {
+          "buy_qty": 991,
+          "sell_qty": 1068,
+          "fills": 408
+        }
+      },
+      "INTARIAN_PEPPER_ROOT": {
+        "PHASE2_BOOK": {
+          "buy_qty": 499,
+          "sell_qty": 0,
+          "fills": 85
+        },
+        "PHASE3_TAPE": {
+          "buy_qty": 194,
+          "sell_qty": 613,
+          "fills": 168
+        }
+      }
+    },
+    "windows": {
+      "0": {
+        "PHASE3_TAPE": 240,
+        "PHASE2_BOOK": 269
+      },
+      "1": {
+        "PHASE2_BOOK": 140,
+        "PHASE3_TAPE": 259
+      },
+      "2": {
+        "PHASE3_TAPE": 330,
+        "PHASE2_BOOK": 135
+      },
+      "3": {
+        "PHASE3_TAPE": 348,
+        "PHASE2_BOOK": 179
+      },
+      "4": {
+        "PHASE2_BOOK": 113,
+        "PHASE3_TAPE": 340
+      },
+      "5": {
+        "PHASE3_TAPE": 213,
+        "PHASE2_BOOK": 211
+      },
+      "6": {
+        "PHASE3_TAPE": 337,
+        "PHASE2_BOOK": 180
+      },
+      "7": {
+        "PHASE3_TAPE": 269,
+        "PHASE2_BOOK": 172
+      },
+      "8": {
+        "PHASE2_BOOK": 169,
+        "PHASE3_TAPE": 235
+      },
+      "9": {
+        "PHASE2_BOOK": 232,
+        "PHASE3_TAPE": 295
+      }
+    },
+    "tape_counts": {
+      "ASH_COATED_OSMIUM": {
+        "n": 471,
+        "qty": 2404
+      },
+      "INTARIAN_PEPPER_ROOT": {
+        "n": 332,
+        "qty": 1671
+      }
+    },
+    "misses": {
+      "ASH_COATED_OSMIUM": {
+        "ask_misses": 262,
+        "bid_misses": 259,
+        "ask_miss_qty": 1310,
+        "bid_miss_qty": 1361
+      },
+      "INTARIAN_PEPPER_ROOT": {
+        "ask_misses": 211,
+        "bid_misses": 271,
+        "ask_miss_qty": 1058,
+        "bid_miss_qty": 1366
+      }
+    },
+    "phase3_price_vs_ours": {
+      "<0": 571,
+      "==0": 5,
+      ">0": 0
+    },
+    "pnl": 102033.0,
+    "per_product_pnl": {
+      "INTARIAN_PEPPER_ROOT": 82313.0,
+      "ASH_COATED_OSMIUM": 19720.0
+    }
+  },
+  "1": {
+    "totals": {
+      "PHASE2_BOOK": {
+        "fills": 336,
+        "qty": 1671,
+        "notional": 18062738.0
+      },
+      "PHASE3_TAPE": {
+        "fills": 565,
+        "qty": 2831,
+        "notional": 31090944.0
+      }
+    },
+    "per_product": {
+      "ASH_COATED_OSMIUM": {
+        "PHASE2_BOOK": {
+          "buy_qty": 753,
+          "sell_qty": 522,
+          "fills": 252
+        },
+        "PHASE3_TAPE": {
+          "buy_qty": 945,
+          "sell_qty": 1096,
+          "fills": 398
+        }
+      },
+      "INTARIAN_PEPPER_ROOT": {
+        "PHASE2_BOOK": {
+          "buy_qty": 396,
+          "sell_qty": 0,
+          "fills": 84
+        },
+        "PHASE3_TAPE": {
+          "buy_qty": 237,
+          "sell_qty": 553,
+          "fills": 167
+        }
+      }
+    },
+    "windows": {
+      "0": {
+        "PHASE3_TAPE": 228,
+        "PHASE2_BOOK": 274
+      },
+      "1": {
+        "PHASE3_TAPE": 267,
+        "PHASE2_BOOK": 119
+      },
+      "2": {
+        "PHASE3_TAPE": 358,
+        "PHASE2_BOOK": 170
+      },
+      "3": {
+        "PHASE3_TAPE": 342,
+        "PHASE2_BOOK": 149
+      },
+      "4": {
+        "PHASE2_BOOK": 205,
+        "PHASE3_TAPE": 339
+      },
+      "5": {
+        "PHASE3_TAPE": 193,
+        "PHASE2_BOOK": 100
+      },
+      "6": {
+        "PHASE3_TAPE": 270,
+        "PHASE2_BOOK": 140
+      },
+      "7": {
+        "PHASE3_TAPE": 339,
+        "PHASE2_BOOK": 191
+      },
+      "8": {
+        "PHASE2_BOOK": 134,
+        "PHASE3_TAPE": 218
+      },
+      "9": {
+        "PHASE2_BOOK": 189,
+        "PHASE3_TAPE": 277
+      }
+    },
+    "tape_counts": {
+      "ASH_COATED_OSMIUM": {
+        "n": 465,
+        "qty": 2375
+      },
+      "INTARIAN_PEPPER_ROOT": {
+        "n": 333,
+        "qty": 1693
+      }
+    },
+    "misses": {
+      "ASH_COATED_OSMIUM": {
+        "ask_misses": 253,
+        "bid_misses": 269,
+        "ask_miss_qty": 1261,
+        "bid_miss_qty": 1386
+      },
+      "INTARIAN_PEPPER_ROOT": {
+        "ask_misses": 223,
+        "bid_misses": 255,
+        "ask_miss_qty": 1140,
+        "bid_miss_qty": 1294
+      }
+    },
+    "phase3_price_vs_ours": {
+      "<0": 564,
+      "==0": 1,
+      ">0": 0
+    },
+    "pnl": 101762.0,
+    "per_product_pnl": {
+      "INTARIAN_PEPPER_ROOT": 83331.0,
+      "ASH_COATED_OSMIUM": 18431.0
+    }
+  }
+}

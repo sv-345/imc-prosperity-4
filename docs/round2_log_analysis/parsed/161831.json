@@ -1,0 +1,57 @@
+{
+  "any_errors": [
+    {
+      "count": 39,
+      "error": "[ERROR] TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'\\n{\"errorMessage\": \"unsupported operand type(s) for +: 'NoneType' and 'int'\", \"errorType\": \"TypeError\", \"requestId\": \"...\", \"stackTrace\": [\"  File \\\"/var/task/app.py\\\", line 30, in lambda_handler\\n    orders, conversion, traderData = trader.run(trading_state)\\n\", \"  File \\\"/var/task/trader.py\\\", line 355, in run\\n    result[product] = self._trade_trending(\\n\", \"  File \\\"/var/task/trader.py\\\", line 329, in _trade_trending\\n    ask_price = max(bb + 1, fv + 1)\\n\"]}",
+      "first_timestamp": 800
+    }
+  ],
+  "fill_rate": 0.11446409989594172,
+  "internal_submission_uuid": "a751ef89-1376-4ddd-b899-8ae61a1e4df5",
+  "log_path": "/tmp/prosperity_logs/161831/164094.log",
+  "per_product": {
+    "ASH_COATED_OSMIUM": {
+      "adverse_move_fills_used": 82,
+      "adverse_move_lookahead_ticks": 5,
+      "avg_fill_size": 6.0813953488372094,
+      "buy_qty": 261,
+      "largest_adverse_move_after_fill": 116.08536585365853,
+      "largest_single_tick_loss": -28.78125,
+      "net_qty": -1,
+      "num_buys": 45,
+      "num_fills": 86,
+      "num_sells": 41,
+      "per_tick_pnl": 3.3291168054110303,
+      "pnl": 3199.28125,
+      "position_limit_hits": 0,
+      "sell_qty": 262
+    },
+    "INTARIAN_PEPPER_ROOT": {
+      "adverse_move_fills_used": 23,
+      "adverse_move_lookahead_ticks": 5,
+      "avg_fill_size": 6.333333333333333,
+      "buy_qty": 116,
+      "largest_adverse_move_after_fill": -0.5652173913043478,
+      "largest_single_tick_loss": -70.484375,
+      "net_qty": 80,
+      "num_buys": 17,
+      "num_fills": 24,
+      "num_sells": 7,
+      "per_tick_pnl": 7.724245577523413,
+      "pnl": 7423.0,
+      "position_limit_hits": 0,
+      "sell_qty": 36
+    }
+  },
+  "per_tick_pnl": 11.053362382934443,
+  "products": [
+    "ASH_COATED_OSMIUM",
+    "INTARIAN_PEPPER_ROOT"
+  ],
+  "run_id": "164094",
+  "submission_id": "161831",
+  "timestamp": 1776277453,
+  "total_fills": 110,
+  "total_pnl": 10622.28125,
+  "total_ticks": 961
+}

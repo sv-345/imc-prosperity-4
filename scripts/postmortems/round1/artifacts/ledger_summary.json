@@ -1,0 +1,34 @@
+{
+  "n_fills": 890,
+  "total_realized_pnl_fifo": 94672.0,
+  "end_inventory": {
+    "ASH_COATED_OSMIUM": 80,
+    "INTARIAN_PEPPER_ROOT": 78
+  },
+  "end_unrealized_mtm_by_symbol": {
+    "ASH_COATED_OSMIUM": 547.0,
+    "INTARIAN_PEPPER_ROOT": 6565.0
+  },
+  "fills_by_symbol_side": {
+    "ASH_COATED_OSMIUM_BUY": {
+      "count": 317,
+      "qty": 1570
+    },
+    "ASH_COATED_OSMIUM_SELL": {
+      "count": 293,
+      "qty": 1490
+    },
+    "INTARIAN_PEPPER_ROOT_BUY": {
+      "count": 158,
+      "qty": 689
+    },
+    "INTARIAN_PEPPER_ROOT_SELL": {
+      "count": 122,
+      "qty": 611
+    }
+  },
+  "sum_adverse_N4_M20": 227,
+  "sum_adverse_N2_M10": 264,
+  "sum_adverse_N6_M50": 255,
+  "official_profit": 101199.6875
+}
