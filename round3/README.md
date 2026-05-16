@@ -7,13 +7,51 @@ started at 7d and decremented 1 day per round).
 
 ## Best performing strategy (preserved)
 
-`IMCProsperityR3/trader.py` — the v86 trader (extends v61 base).
-**Final R3 server result: $14,601.82** (submission 368653). 18.8× improvement
-over first submission (v2 at $776.85).
+`round3/463514.py` — the v86 wing-bid trader (extends v61 base).
+**Final R3 server result: $41,556** (submission 463514). Trade history
+and activities log preserved in `463514.log` / `463514.json`.
+
+An earlier v86-family run (sub 368653, mid-season) scored $14,601.82 and
+was the headline number for most of R3. The preserved `463514` run is
+the end-of-round scoring sub on the same strategy family and is roughly
+3× larger — consistent with R3's per-day variance and the longer-lived
+HYDROGEL anchor windows present in the scored session.
 
 Backtester: `IMCProsperityR3/` uses the shared
 `chrispyroberts-imc-prosperity-4/` fork (top-level) as its sim runtime.
 No local backtester to preserve.
+
+### PnL attribution — sub 463514
+
+| Product               | Server PnL | Notes                                                          |
+| --------------------- | ---------: | -------------------------------------------------------------- |
+| HYDROGEL_PACK         |    $21,685 | Anchor-relative take (anchor=9991, edge=28) — the headline edge. |
+| VEV_5200              |     $5,724 | Delta-1 voucher MM, near-the-money.                            |
+| VEV_5300              |     $4,192 | Same.                                                          |
+| VEV_5100              |     $2,272 | Same.                                                          |
+| VEV_5000              |     $1,876 | Same.                                                          |
+| VEV_5400              |     $1,719 | Same.                                                          |
+| VEV_4500              |       $864 | Deep-ITM take.                                                 |
+| VEV_4000              |       $403 | Deep-ITM take.                                                 |
+| VELVETFRUIT_EXTRACT   |     $2,646 | Anchor-relative take (anchor=5250, edge=23).                   |
+| VEV_5500              |       $176 | Marginal.                                                      |
+| VEV_6000 / VEV_6500   |        $0  | Wing bid-at-0 never filled.                                    |
+| **Total**             | **$41,556** |                                                                |
+
+Headline: HYDROGEL anchor-relative take is 52% of the round; voucher
+delta-1 MM on the 5000–5400 strike band is another ~$16k. VELVET
+anchor-take is smaller than HYDROGEL despite the larger position limit
+— anchor windows on VELVET are narrower in the scored session.
+
+### Wing bid-at-0 — costless but uninformative
+
+The v86 addition over v61 was a passive `bid = 0` on VEV_5500 / 6000 /
+6500. The thesis (`wing_voucher_architecture.md` in auto-memory):
+"long at bid = 0 carries positive expectation almost regardless of the
+underlying realisation." Server result: zero fills on all three wings,
+zero PnL. The bid is costless to maintain but produces no PnL — the
+asymmetry is real, the *opportunity* to trigger it on the server is
+not. Treat the wing bid as evidence-free until a fill is observed.
 
 ## Final strategy (three-layer)
 

@@ -200,7 +200,7 @@ def delta1_orders(product: str, depth: OrderDepth, current_pos: int, budget: int
     size = DELTA1_QUOTE_SIZE.get(product, 10)
 
     # Anchor-relative take. Best config: HY BUY 32 / SELL 28. VL BUY 18 / SELL 23.
-    take_buy_edges = {"HYDROGEL_PACK": 32, "VELVETFRUIT_EXTRACT": 18}
+    take_buy_edges = {"HYDROGEL_PACK": 46, "VELVETFRUIT_EXTRACT": 18}  # v135: HY buy 32→34
     take_sell_edges = {"HYDROGEL_PACK": 28, "VELVETFRUIT_EXTRACT": 23}
     take_buy_edge = take_buy_edges.get(product, 0)
     take_sell_edge = take_sell_edges.get(product, 0)
@@ -222,7 +222,7 @@ def delta1_orders(product: str, depth: OrderDepth, current_pos: int, budget: int
     # v53 reverted: depth-2 was optimal on server. SA2's L1→L2 gap analysis
     # didn't translate (server matching may fill at order price not book price).
     # v86r: asymmetric sweep — HY BUY 50, HY SELL 30
-    sweep_buy_edges = {"HYDROGEL_PACK": 50, "VELVETFRUIT_EXTRACT": 30}
+    sweep_buy_edges = {"HYDROGEL_PACK": 80, "VELVETFRUIT_EXTRACT": 30}
     sweep_sell_edges = {"HYDROGEL_PACK": 30, "VELVETFRUIT_EXTRACT": 25}  # v86t
     sb_edge = sweep_buy_edges.get(product, 0)
     ss_edge = sweep_sell_edges.get(product, 0)
@@ -242,10 +242,15 @@ def delta1_orders(product: str, depth: OrderDepth, current_pos: int, budget: int
     # v60 rejected: bb+2/ba-2 on HYDROGEL lost $60. A2's "same fill rate"
     # claim was wrong — bb+2 misses bot-to-bot trades priced at bb+1 that
     # would have stepped into bb+1 quotes. Reverted to bb+1/ba-1.
-    if current_pos + already_buy < budget:
-        orders.append(Order(product, bb + 1, min(size, budget - current_pos - already_buy)))
-    if current_pos - already_sell > -budget and not skip_velvet_ask:
-        orders.append(Order(product, ba - 1, -min(size, budget + current_pos - already_sell)))
+    # composition: HY MM offset override
+    _hy_bid_off = 1  # v125: HY MM revert (also in v113)
+    _hy_ask_off = 1 if product == "HYDROGEL_PACK" else 1
+    _bid_px = bb + _hy_bid_off
+    _ask_px = ba - _hy_ask_off
+    if current_pos + already_buy < budget and _bid_px < _ask_px and _bid_px >= 1:
+        orders.append(Order(product, _bid_px, min(size, budget - current_pos - already_buy)))
+    if current_pos - already_sell > -budget and not skip_velvet_ask and _bid_px < _ask_px and _ask_px >= 1:
+        orders.append(Order(product, _ask_px, -min(size, budget + current_pos - already_sell)))
     return orders
 
 
@@ -451,9 +456,17 @@ class Trader:
                 velvet_tier2_buy = True
         VOUCHER_MIRROR_STRIKES = (4000, 4500, 5000, 5100, 5200, 5300, 5400)  # excl 5500
         # v73: tight-surface gate with smaller edges (cleaner signal can fire on smaller deviations).
-        VOUCHER_ANCHORS = {5000: 252.0, 5100: 165.0, 5200: 95.5, 5300: 47.5, 5400: 14.0, 5500: 5.0}  # v86d
-        VOUCHER_EDGES_TIGHT = {5000: 0, 5100: 0, 5200: 0, 5300: 1, 5400: 1, 5500: 1}  # v86z
-        VOUCHER_EDGES_WIDE = {5000: 99, 5100: 99, 5200: 3, 5300: 4, 5400: 99, 5500: 99}
+        VOUCHER_ANCHORS = {5000: 262.0, 5100: 172.0, 5200: 95.5, 5300: 47.5, 5400: 17.0, 5500: 7.0}  # v86d
+        # v142: asymmetric per-strike anchors. SELL trigger uses sell_anchor; BUY trigger uses buy_anchor.
+        VOUCHER_ANCHOR_SELL = dict(VOUCHER_ANCHORS)
+        VOUCHER_ANCHOR_SELL[5400] = 18.0
+        VOUCHER_ANCHOR_SELL[5100] = 176.0
+        VOUCHER_ANCHOR_SELL[5000] = 264.0
+        VOUCHER_ANCHOR_BUY = dict(VOUCHER_ANCHORS)
+        VOUCHER_ANCHOR_BUY[5000] = 246.0
+        VOUCHER_ANCHOR_BUY[5100] = 157.0
+        VOUCHER_EDGES_TIGHT = {5000: 0, 5100: 0, 5200: 0, 5300: 4, 5400: 1, 5500: 1}  # v86z
+        VOUCHER_EDGES_WIDE = {5000: 99, 5100: 99, 5200: 3, 5300: 4, 5400: 4, 5500: 99}  # v123: enable 5400
         d5200 = state.order_depths.get("VEV_5200")
         d5300 = state.order_depths.get("VEV_5300")
         tight_surface = False
@@ -472,12 +485,24 @@ class Trader:
         velvet_mid_now = s.last_mid.get("VELVETFRUIT_EXTRACT")
         velvet_market_trades = state.market_trades.get("VELVETFRUIT_EXTRACT", [])
         if prev_velvet_mid > 0 and any(t.price > prev_velvet_mid for t in velvet_market_trades):
-            s.velvet_ask_cooldown = 5
+            s.velvet_ask_cooldown = 2
         if velvet_mid_now is not None:
             s.velvet_mid_prev = velvet_mid_now
         skip_velvet_ask = s.velvet_ask_cooldown > 0
         if s.velvet_ask_cooldown > 0:
             s.velvet_ask_cooldown -= 1
+
+
+        # v145: voucher inventory throttle on TAKE entries (from v141_invtt)
+        INVTT_F = 0.72  # v142 finding: 0.69 better than 0.75 on this base
+        voucher_pos_total = 0
+        voucher_limit_total = 0
+        for prod_name in POS_LIMIT:
+            if prod_name.startswith("VEV_"):
+                voucher_pos_total += abs(state.position.get(prod_name, 0))
+                voucher_limit_total += POS_LIMIT[prod_name]
+        inv_frac = voucher_pos_total / voucher_limit_total if voucher_limit_total > 0 else 0.0
+        take_scale = max(0.0, 1.0 - inv_frac) if inv_frac > INVTT_F else 1.0
 
         for product, depth in state.order_depths.items():
             current_pos = state.position.get(product, 0)
@@ -510,15 +535,14 @@ class Trader:
                 if strike in VOUCHER_MIRROR_STRIKES:
                     voucher_take_sell = velvet_take_sell
                     voucher_take_buy = velvet_take_buy
-                # Per-voucher own anchor signal — gated on tight-surface state
+                # v142: asymmetric per-side anchor
                 if strike in VOUCHER_ANCHORS:
                     bb_v_, ba_v_, _, _ = best_bid_ask(depth)
                     if bb_v_ is not None and ba_v_ is not None:
-                        v_anchor = VOUCHER_ANCHORS[strike]
                         v_edge = VOUCHER_EDGES.get(strike, 5)
-                        if bb_v_ >= v_anchor + v_edge:
+                        if bb_v_ >= VOUCHER_ANCHOR_SELL[strike] + v_edge:
                             voucher_take_sell = True
-                        elif ba_v_ <= v_anchor - v_edge:
+                        elif ba_v_ <= VOUCHER_ANCHOR_BUY[strike] - v_edge:
                             voucher_take_buy = True
                 if not (voucher_take_sell or voucher_take_buy) and (velvet_imb_take_sell or velvet_imb_take_buy):
                     bb_, ba_, _, _ = best_bid_ask(depth)
@@ -526,11 +550,13 @@ class Trader:
                         if velvet_imb_take_sell and current_pos > -budget:
                             vol = depth.buy_orders[bb_]
                             qty = min(vol, budget + current_pos, 30)
+                            qty = int(qty * take_scale)
                             if qty > 0:
                                 orders = [Order(product, bb_, -qty)]
                         elif velvet_imb_take_buy and current_pos < budget:
                             vol = -depth.sell_orders[ba_]
                             qty = min(vol, budget - current_pos, 30)
+                            qty = int(qty * take_scale)
                             if qty > 0:
                                 orders = [Order(product, ba_, qty)]
                 if voucher_take_sell or voucher_take_buy:
@@ -539,11 +565,13 @@ class Trader:
                         if voucher_take_sell and current_pos > -budget:
                             vol = depth.buy_orders[bb_]
                             qty = min(vol, budget + current_pos, 600)  # v85aa
+                            qty = int(qty * take_scale)
                             if qty > 0:
                                 orders = [Order(product, bb_, -qty)]
                         elif voucher_take_buy and current_pos < budget:
                             vol = -depth.sell_orders[ba_]
                             qty = min(vol, budget - current_pos, 600)  # v85aa
+                            qty = int(qty * take_scale)
                             if qty > 0:
                                 orders = [Order(product, ba_, qty)]
                 elif strike in VEV_PASSIVE_MM_STRIKES:

@@ -5,18 +5,45 @@ Products: same as R1 — **OSMIUM** + **PEPPER**.
 Server testing was 1 day × **1000 ticks** (not 10k as in R1). Compare
 $/tick across submissions, not absolute PnL.
 
-## Best performing strategies (all three preserved)
+## Best performing strategies
 
-| Sub | File | Notes |
-|---|---|---|
-| 296164 | `ROUND_2/296164/296164.py` | Early R2 — failed with `ERROR_FINISHED` due to `from prosperity3bt.datamodel` import (not allowed on server). Must use `from datamodel import …`. |
-| 305289 | `ROUND_2/305289/305289.py` | iter6 — server **$1.43/tick** vs MC $0.99/tick (server +45%). |
-| 308086 | `ROUND_2/308086/308086.py` | Latest preserved submission. |
-| `iter23_trader.py` | local | Validated baseline. iter24 dynamic gate regressed −$829/day vs iter23 → dropped. |
+| Sub | File | Server PnL | Notes |
+|---|---|---:|---|
+| **342122** | `submissions/342122.py` (iter23) | **$9,268** | End-of-round preserved submission. OSM $1,945 + PEPPER $7,323. Log + trade history in `342122.log` / `342122.json`. |
 
-The **off-disk champion** was **iter30** (sub 332955) at **$9,916.50** —
-K=5-outside / K=1-inside windows + c4 position-conditional take-gate. Not
-preserved locally; reference for future rounds only.
+Earlier reference points (no longer preserved on disk):
+
+- **iter30** (sub 332955) — $9,916.50 mid-season high. K=5-outside /
+  K=1-inside windows + c4 position-conditional take-gate. Off-disk;
+  reference value only.
+- **iter6** (sub 305289) — server $1.43/tick vs MC $0.99/tick. The
+  first sub that flagged MC under-prediction by ~45% on PEPPER.
+- **sub 296164** — failed with `ERROR_FINISHED` from a
+  `from prosperity3bt.datamodel` import. Server only accepts
+  `from datamodel import …`. The `/imc-submit` skill exists to
+  rewrite this automatically.
+
+### Trade breakdown — sub 342122
+
+- **OSMIUM:** 76 fills, 169 bought / 224 sold. Net short ~55. PnL $1,945
+  — about 60% of R1's OSM contribution. The iter23 defensive widen plus
+  signal-gated PEP recycle protected PEPPER but cost OSM about a third
+  of its R1 take.
+- **PEPPER:** 47 fills, 129 bought / 51 sold. Net long ~78 (same drift
+  position as R1). PnL $7,323 — essentially unchanged from R1's $7,580.
+
+The two rounds reinforce the same conclusion: **PEPPER drift is the
+durable edge**. Both R1 and R2 OSM contributions are an order of
+magnitude smaller and a function of which side of the adverse-selection
+trade you take.
+
+### iter23 design notes
+
+iter22 added defensive widening on both products when bot-take signal
+predicts adverse next-tick move. iter23 then gated the PEP recycle
+quantity on the same signal — `take_sig ≥ +thresh` skips the recycle
+sell entirely; `take_sig ≤ −thresh` doubles it. iter24's dynamic OSM FV
+gate regressed −$829/day and was dropped.
 
 Other validated mid-rounds:
 

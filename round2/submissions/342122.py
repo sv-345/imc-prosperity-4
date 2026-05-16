@@ -1,4 +1,25 @@
-"""Iter 22 — iter12 + DEFENSIVE bot-take signal (withdraw adverse side).
+"""Iter 23 — iter22 + signal-gated PEP recycle size.
+
+iter22 added defensive widening on both products when bot-take signal
+predicts adverse next-tick move. Marginal server uplift (+$208).
+
+iter23 replaces the PEP recycle qty logic: instead of always selling 8
+at ba-1 when pos≥70, gate qty on signal. Data: PEP SELL pnl50 by signal:
+  -sig (mid dropping): -$1.33/u (LEAST adverse — best sell window)
+  0sig: -$3.82/u
+  +sig: no data but predicted WORST (buy-takers rising mid)
+
+Gating:
+  take_sig ≥ +NET_TAKE_THRESH_DEF: sell 0 (skip recycle — ask adversely selected)
+  take_sig ≤ -NET_TAKE_THRESH_DEF: sell 15 (double normal — best quality window)
+  otherwise: sell 8 (default)
+
+Keeps iter22 defensive-widen for OSM + PEP buy side. Only change is PEP
+recycle SELL qty gating.
+
+Original iter22 docstring:
+---
+iter12 + DEFENSIVE bot-take signal (withdraw adverse side).
 
 iter20 price-shift: flat. iter21 direct cross: regressed $400.
 The bot-take signal moves mid BEFORE I can act. So rather than trying to
@@ -70,6 +91,16 @@ PEP_SLOPE = 0.1
 NET_TAKE_THRESH_DEF = 3
 ADVERSE_SHRINK = 0.2
 ADVERSE_WIDEN = 3
+
+# iter30: window-aware K. K=5 outside windows (k5 alpha) + K=1 inside windows
+# (lets c4 take-gate fire on short + elevated mid, captures OSM edge).
+OSM_PHASE3_K_OUTSIDE = 5
+OSM_PHASE3_K_INSIDE = 1
+_WINDOWS = ((34300, 48100), (76100, 90100))
+def _in_window(ts):
+    for lo, hi in _WINDOWS:
+        if lo <= ts <= hi: return True
+    return False
 
 
 def net_take_signal(market_trades_list, bp1, ap1):
@@ -290,11 +321,14 @@ class Trader:
 
         result = {}
 
+        in_win = _in_window(state.timestamp)
+        osm_k = OSM_PHASE3_K_INSIDE if in_win else OSM_PHASE3_K_OUTSIDE
+
         osm = "ASH_COATED_OSMIUM"
         if osm in state.order_depths:
             result[osm] = self._trade_osmium(
                 osm, state.order_depths[osm], state.position.get(osm, 0),
-                take_sig.get(osm, 0),
+                take_sig.get(osm, 0), osm_k, in_win,
             )
 
         if pep in state.order_depths:
@@ -314,7 +348,7 @@ class Trader:
         })
         return result, 0, td
 
-    def _trade_osmium(self, product, d, pos, take_sig=0):
+    def _trade_osmium(self, product, d, pos, take_sig=0, osm_k=1, in_window=False):
         fv = OSM_FV
         orders = []
         opos = pos
@@ -331,9 +365,29 @@ class Trader:
         if dynamic_fv is None:
             dynamic_fv = fv
 
-        # Aggressive take-ask: cross ANY ask below fv if vol≤9 OR real_edge≥2
+        # c4: conditional take-gate relaxation.
+        # When we're short (pos < -20) AND mid is elevated (dynamic_fv >= 10005),
+        # relax take-ask gate to dynamic_fv (we can buy back at better-than-stale-bid prices).
+        # When we're long (pos > +20) AND mid is deflated (dynamic_fv <= 9997),
+        # relax take-bid gate to dynamic_fv (sell at reasonable prices).
+        # This is POSITION-CONDITIONAL, unlike Rule 2's unconditional dynamic gate.
+        # iter31: inside windows, lower take-gate pos threshold and widen gate by +1.
+        ask_gate = fv
+        bid_gate = fv
+        if in_window:
+            if pos < -25 and dynamic_fv >= 10000:
+                ask_gate = int(dynamic_fv) + 1
+            if pos > 25 and dynamic_fv <= 10002:
+                bid_gate = int(dynamic_fv) - 1
+        else:
+            if pos < -40 and dynamic_fv >= 10001:
+                ask_gate = int(dynamic_fv)
+            if pos > 40 and dynamic_fv <= 10001:
+                bid_gate = int(dynamic_fv)
+
+        # Aggressive take-ask: cross ANY ask below ask_gate if vol≤9 OR real_edge≥2
         for ap in sorted(d.sell_orders):
-            if ap >= fv:
+            if ap >= ask_gate:
                 break
             vol = -d.sell_orders[ap]
             real_edge = dynamic_fv - ap
@@ -343,9 +397,9 @@ class Trader:
                     orders.append(Order(product, ap, fill))
                     pos += fill
 
-        # Mirror for bids: take ANY bid above fv
+        # Mirror for bids: take ANY bid above bid_gate
         for bp in sorted(d.buy_orders, reverse=True):
-            if bp <= fv:
+            if bp <= bid_gate:
                 break
             vol = d.buy_orders[bp]
             real_edge = bp - dynamic_fv
@@ -362,8 +416,8 @@ class Trader:
 
         edge = 20
         if bb is not None and ba is not None:
-            bid_pj = min(bb + 1, fv - 1)
-            ask_pj = max(ba - 1, fv + 1)
+            bid_pj = min(bb + 1, int(dynamic_fv) - osm_k)
+            ask_pj = max(ba - 1, int(dynamic_fv) + osm_k)
             # iter22: widen the defending side
             if defend_ask:
                 ask_pj = ask_pj + ADVERSE_WIDEN  # raise ask (away from predicted higher mid)
@@ -448,13 +502,16 @@ class Trader:
                     buy_cap = int(round(buy_cap * ADVERSE_SHRINK))
                 if buy_cap > 0:
                     orders.append(Order(product, bid_price, buy_cap))
-            sell_qty = min(8, limit + pos)
+            # iter23: gate recycle sell qty by signal
+            if take_sig >= NET_TAKE_THRESH_DEF:
+                base_sell = 0  # skip — ask about to be adversely selected
+            elif take_sig <= -NET_TAKE_THRESH_DEF:
+                base_sell = 15  # sell more during best-quality window
+            else:
+                base_sell = 8
+            sell_qty = min(base_sell, limit + pos)
             if sell_qty > 0:
                 ask_price = max(ba - 1, fv_int + 1) if ba else fv_int + 7
-                if defend_ask:
-                    ask_price += ADVERSE_WIDEN
-                    sell_qty = int(round(sell_qty * ADVERSE_SHRINK))
-                if sell_qty > 0:
-                    orders.append(Order(product, ask_price, -sell_qty))
+                orders.append(Order(product, ask_price, -sell_qty))
 
         return orders

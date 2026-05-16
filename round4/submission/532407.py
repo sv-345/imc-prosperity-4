@@ -1,14 +1,12 @@
-"""n22_mark67_prophet — n16 + Mark 67 directional join on VELVETFRUIT.
+"""nN33_voucher_imb_skip — nN32 + extend imb-skip to vouchers (5000-5400).
 
-Per scripts/bot_analysis.py, Mark 67 has 95.4% directional hit rate at H=1 on
-VELVETFRUIT (only product they trade). This is the round-4 prophet bot.
+Voucher imb≥0.7 forward UP +0.29-0.32 t=+23 to +35 (4-6k events per strike).
+Voucher imb≤0.3 forward DOWN -0.24 to -0.29 t=-24 to -33 (similar n).
 
-Pattern (mirroring n14b structure but opposite sign — n14b fades anti-signal
-Mark 14; n22 follows prophet Mark 67):
-- Mark 67 BUYS VELV → price will rise → passive BID at bb+1 (priority join)
-- Mark 67 SELLS VELV → price will fall → passive ASK at ba-1
-
-Size 15 (matching n14b/n9c). Inherits all n16 logic.
+When voucher imb high, skip ASK (avoid being run over). When low, skip BID.
+Existing delta1 MM posts ASK at ba-1 every tick — when imb is heavy-bid, that
+ask gets run over by aggressive buyers at adverse price. SKIP the ask in
+this state. Symmetric: imb ≤ 0.4 → skip BID (forward DOWN).
 """
 from __future__ import annotations
 
@@ -101,21 +99,45 @@ def voucher_theo(velvet_mid: float, K: int) -> float:
     return bs_call(velvet_mid, float(K), R3_LIVE_TTE_YEARS, sigma)
 
 
+DRIFT_GUARD_STRIKES = (5200, 5300, 5400, 5500)
+
+# nN1: regime-shift guard. Trips when |VELV_mid - anchor| > GUARD_DEV for
+# GUARD_CONSEC consecutive ticks. R4 D1/D2/D3 max abs dev = 58.5 → threshold 60
+# is dormant on training. Directional: low_active gates BUY, high_active gates SELL.
+GUARD_DEV: float = 60.0
+GUARD_CONSEC: int = 30
+
+
+def drift_buy_scale(drop_from_open: float) -> float:
+    """17->0.4, 48->0.0 (sweep). Throttles voucher BUY takes when VELV down-trends."""
+    if drop_from_open <= 30:
+        return 1.0
+    if drop_from_open <= 60:
+        return 0.4
+    return 0.0
+
+
 class State:
     __slots__ = ("tick", "last_mid", "closed", "velvet_ask_cooldown",
-                 "ema_theo_diff", "ema_abs_dev", "velvet_mid_prev")
+                 "ema_theo_diff", "ema_abs_dev", "velvet_mid_prev",
+                 "velvet_open", "agg_buy", "agg_sell", "m67_stick",
+                 "guard_run_low", "guard_run_high")
 
     def __init__(self) -> None:
         self.tick: int = 0
         self.last_mid: Dict[str, float] = {}
         self.closed: Dict[str, bool] = {}
-        # v61: ticks remaining to SKIP VELVET ask after BUY-agg print (A3 finding)
         self.velvet_ask_cooldown: int = 0
-        # v85: per-strike EMA of theo_diff (Frankfurt smile scalping)
         self.ema_theo_diff: Dict[str, float] = {}
         self.ema_abs_dev: Dict[str, float] = {}
-        # v85k: prev-tick VELVET mid for dS direction predictor
         self.velvet_mid_prev: float = 0.0
+        self.velvet_open: float = 0.0
+        self.agg_buy: Dict[str, float] = {}
+        self.agg_sell: Dict[str, float] = {}
+        self.m67_stick: int = 0
+        # nN1: regime-shift guard counters
+        self.guard_run_low: int = 0   # mid sustained below anchor - GUARD_DEV
+        self.guard_run_high: int = 0  # mid sustained above anchor + GUARD_DEV
 
     def to_json(self) -> str:
         return json.dumps({
@@ -125,6 +147,12 @@ class State:
             "ema_theo_diff": self.ema_theo_diff,
             "ema_abs_dev": self.ema_abs_dev,
             "velvet_mid_prev": self.velvet_mid_prev,
+            "velvet_open": self.velvet_open,
+            "agg_buy": self.agg_buy,
+            "agg_sell": self.agg_sell,
+            "m67_stick": self.m67_stick,
+            "guard_run_low": self.guard_run_low,
+            "guard_run_high": self.guard_run_high,
         })
 
     @classmethod
@@ -143,6 +171,12 @@ class State:
         out.ema_theo_diff = {k: float(v) for k, v in d.get("ema_theo_diff", {}).items()}
         out.ema_abs_dev = {k: float(v) for k, v in d.get("ema_abs_dev", {}).items()}
         out.velvet_mid_prev = float(d.get("velvet_mid_prev", 0.0))
+        out.velvet_open = float(d.get("velvet_open", 0.0))
+        out.agg_buy = {k: float(v) for k, v in d.get("agg_buy", {}).items()}
+        out.agg_sell = {k: float(v) for k, v in d.get("agg_sell", {}).items()}
+        out.m67_stick = int(d.get("m67_stick", 0))
+        out.guard_run_low = int(d.get("guard_run_low", 0))
+        out.guard_run_high = int(d.get("guard_run_high", 0))
         return out
 
 
@@ -221,13 +255,21 @@ def delta1_orders(product: str, depth: OrderDepth, current_pos: int, budget: int
     sweep_sell_edges = {"HYDROGEL_PACK": 30, "VELVETFRUIT_EXTRACT": 25}  # v86t
     sb_edge = sweep_buy_edges.get(product, 0)
     ss_edge = sweep_sell_edges.get(product, 0)
+    # nN98: gate sweep edges on L1 depletion
+    # nN100: also compute L1-L2 gaps for MM gating below
+    l1_ask_vol_sw = -depth.sell_orders[ba]
+    l1_bid_vol_sw = depth.buy_orders[bb]
+    sells_sorted_sw = sorted(depth.sell_orders.keys())
+    buys_sorted_sw = sorted(depth.buy_orders.keys(), reverse=True)
+    ask_gap_sw = (sells_sorted_sw[1] - sells_sorted_sw[0]) if len(sells_sorted_sw) >= 2 else 0
+    bid_gap_sw = (buys_sorted_sw[0] - buys_sorted_sw[1]) if len(buys_sorted_sw) >= 2 else 0
     if sb_edge > 0:
-        if ba <= anchor - sb_edge and current_pos < budget:
+        if ba <= anchor - sb_edge and current_pos < budget and l1_bid_vol_sw > 5:
             qty = min(budget - current_pos, 600)
             if qty > 0:
                 orders.append(Order(product, ba + 2, qty))
     if ss_edge > 0:
-        if bb >= anchor + ss_edge and current_pos > -budget:
+        if bb >= anchor + ss_edge and current_pos > -budget and l1_ask_vol_sw > 5:
             qty = min(budget + current_pos, 600)
             if qty > 0:
                 orders.append(Order(product, bb - 2, -qty))
@@ -238,13 +280,21 @@ def delta1_orders(product: str, depth: OrderDepth, current_pos: int, budget: int
     # claim was wrong — bb+2 misses bot-to-bot trades priced at bb+1 that
     # would have stepped into bb+1 quotes. Reverted to bb+1/ba-1.
     # composition: HY MM offset override
-    _hy_bid_off = 1  # v125: HY MM revert (also in v113)
-    _hy_ask_off = 1 if product == "HYDROGEL_PACK" else 1
+    # n75: HY+VELV MM at bb/ba (be like Mark 14 — proven +$7,248 BT vs bb+1)
+    _hy_bid_off = 0
+    _hy_ask_off = 0
     _bid_px = bb + _hy_bid_off
     _ask_px = ba - _hy_ask_off
-    if current_pos + already_buy < budget and _bid_px < _ask_px and _bid_px >= 1:
+    # nN100: gate HY/VELV MM directional side on L1-L2 GAP signal.
+    # ask_gap_sw/bid_gap_sw computed above (sweep block). Reuse.
+    # If ask_gap >= 5 (HY) / 3 (VELV), mid likely rising → skip ASK side (avoid selling into rising mid)
+    # If bid_gap >= 5 (HY) / 3 (VELV), mid likely falling → skip BID side (avoid buying into falling mid)
+    _gap_thr = 5 if product == "HYDROGEL_PACK" else 3
+    _skip_bid = bid_gap_sw >= _gap_thr
+    _skip_ask = ask_gap_sw >= _gap_thr
+    if current_pos + already_buy < budget and _bid_px < _ask_px and _bid_px >= 1 and not _skip_bid:
         orders.append(Order(product, _bid_px, min(size, budget - current_pos - already_buy)))
-    if current_pos - already_sell > -budget and not skip_velvet_ask and _bid_px < _ask_px and _ask_px >= 1:
+    if current_pos - already_sell > -budget and not skip_velvet_ask and _bid_px < _ask_px and _ask_px >= 1 and not _skip_ask:
         orders.append(Order(product, _ask_px, -min(size, budget + current_pos - already_sell)))
     return orders
 
@@ -311,7 +361,14 @@ def wing_voucher_orders(
         qty = min(vol, budget - current_pos, 50)
         if qty > 0:
             orders.append(Order(product, ba, qty))
-    # n24: kill the bid-at-0 (R3 postmortem fix #6 — never filled in 486417).
+    # n51/n62: bid-at-0 on VEV_6000/6500 wings. Inv1 confirmed Mark 22 sells
+    # ~100/day per strike at price 0; long-at-0 marked at last-tick mid 0.5 →
+    # +$0.50/unit. Exempted from inv-throttle numerator below.
+    if current_pos < budget:
+        already_buy = sum(o.quantity for o in orders if o.quantity > 0)
+        size = min(50, budget - current_pos - already_buy)
+        if size > 0:
+            orders.append(Order(product, 0, size))
     return orders
 
 
@@ -362,10 +419,11 @@ def deep_itm_orders_with_mm(
         size = 15
         already_buy = sum(o.quantity for o in orders if o.quantity > 0)
         already_sell = sum(-o.quantity for o in orders if o.quantity < 0)
+        # n75: deep_itm passive MM at bb/ba (Mark 14 trades VEV_4000 heavily)
         if current_pos + already_buy < budget:
-            orders.append(Order(product, bb + 1, min(size, budget - current_pos - already_buy)))
+            orders.append(Order(product, bb, min(size, budget - current_pos - already_buy)))
         if current_pos - already_sell > -budget:
-            orders.append(Order(product, ba - 1, -min(size, budget + current_pos - already_sell)))
+            orders.append(Order(product, ba, -min(size, budget + current_pos - already_sell)))
     return orders
 
 
@@ -400,12 +458,56 @@ class Trader:
             if mid is not None:
                 s.last_mid[product] = mid
 
-        # close_ticks disabled — v58h-style 1k-tuned close fires too early on 10k eval
-        # (was: HYDROGEL_PACK=690, VELVETFRUIT_EXTRACT=600 — fires at 6.9%/6% on 10k)
+        # nP1: aggressor-flow EWMA per voucher strike. Use prev-tick mid as
+        # reference: trade price > prev_mid → buy-aggr; < → sell-aggr; equal skip.
+        FLOW_DECAY = 0.99
+        for K in (5000, 5100, 5200, 5300, 5400, 5500, 6000, 6500):
+            sym = f"VEV_{K}"
+            prev_m = prev_mids.get(sym)
+            s.agg_buy[sym] = s.agg_buy.get(sym, 0.0) * FLOW_DECAY
+            s.agg_sell[sym] = s.agg_sell.get(sym, 0.0) * FLOW_DECAY
+            if prev_m is None:
+                continue
+            for tr in state.market_trades.get(sym, []):
+                if tr.price > prev_m:
+                    s.agg_buy[sym] += tr.quantity
+                elif tr.price < prev_m:
+                    s.agg_sell[sym] += tr.quantity
+
         pass
 
         underlying_mid = s.last_mid.get("VELVETFRUIT_EXTRACT", FV_ANCHOR["VELVETFRUIT_EXTRACT"])
         result: Dict[str, List[Order]] = {}
+
+        # nN1: regime-shift guard tracking. Only updates state — does NOT gate.
+        # Threshold 60 is beyond historical max abs deviation (D3 hit 58.5),
+        # so on R4 D1/D2/D3 these counters never reach GUARD_CONSEC and the
+        # behavior is byte-identical to nK_75. nN1b consumes the active flags.
+        velv_anchor = FV_ANCHOR["VELVETFRUIT_EXTRACT"]
+        velv_dev = underlying_mid - velv_anchor
+        if velv_dev <= -GUARD_DEV:
+            s.guard_run_low += 1
+        else:
+            s.guard_run_low = 0
+        if velv_dev >= GUARD_DEV:
+            s.guard_run_high += 1
+        else:
+            s.guard_run_high = 0
+        guard_low_active = s.guard_run_low >= GUARD_CONSEC
+        guard_high_active = s.guard_run_high >= GUARD_CONSEC
+
+        # n50: VELV drop-from-open guard × inventory factor (combine n47e + n49).
+        if s.velvet_open == 0.0 and "VELVETFRUIT_EXTRACT" in s.last_mid:
+            s.velvet_open = s.last_mid["VELVETFRUIT_EXTRACT"]
+        drop_from_open = (s.velvet_open - underlying_mid) if s.velvet_open > 0 else 0.0
+        guard_long_inv = sum(max(state.position.get(f"VEV_{k}", 0), 0) for k in DRIFT_GUARD_STRIKES)
+        if guard_long_inv >= 300:
+            inv_factor = 0.3
+        elif guard_long_inv >= 30:
+            inv_factor = 0.7 - 0.39999999999999997 * (guard_long_inv - 30) / 270
+        else:
+            inv_factor = 1.0
+        guard_buy_scale = drift_buy_scale(drop_from_open) * inv_factor
 
         # v69: per-voucher anchor signal. Each voucher has its own BSM-based
         # anchor: BSM(5250, K, 5/365, σ_K). Take when bot bid/ask deviates
@@ -423,9 +525,14 @@ class Trader:
             ask_vol = -sum(velvet_depth.sell_orders.values())
             denom = bid_vol + ask_vol
             velvet_imb = (bid_vol - ask_vol) / denom if denom > 0 else 0.0
-            if bb_v >= anchor_v + 22:
+            # nN87: gate mirror trigger on L1 depletion
+            # If ask thin (<=5), don't take_sell (mid likely to keep rising)
+            # If bid thin (<=5), don't take_buy (mid likely to keep falling)
+            l1_ask_vol = -velvet_depth.sell_orders[ba_v]
+            l1_bid_vol = velvet_depth.buy_orders[bb_v]
+            if bb_v >= anchor_v + 21 and not guard_high_active and l1_ask_vol > 5:
                 velvet_take_sell = True
-            elif ba_v <= anchor_v - 22:
+            elif ba_v <= anchor_v - 33 and not guard_low_active and l1_bid_vol > 5:
                 velvet_take_buy = True
             if velvet_imb >= 0.05:
                 velvet_imb_take_sell = True
@@ -439,9 +546,9 @@ class Trader:
             bb_v2 = max(velvet_depth.buy_orders.keys())
             ba_v2 = min(velvet_depth.sell_orders.keys())
             anchor_v2 = FV_ANCHOR["VELVETFRUIT_EXTRACT"]
-            if bb_v2 >= anchor_v2 + 18 and bb_v2 < anchor_v2 + 22:
+            if bb_v2 >= anchor_v2 + 18 and bb_v2 < anchor_v2 + 21 and not guard_high_active:
                 velvet_tier2_sell = True
-            elif ba_v2 <= anchor_v2 - 18 and ba_v2 > anchor_v2 - 22:
+            elif ba_v2 <= anchor_v2 - 18 and ba_v2 > anchor_v2 - 33 and not guard_low_active:
                 velvet_tier2_buy = True
         VOUCHER_MIRROR_STRIKES = (4000, 4500, 5000, 5100, 5200, 5300, 5400)  # excl 5500
         # v73: tight-surface gate with smaller edges (cleaner signal can fire on smaller deviations).
@@ -464,7 +571,7 @@ class Trader:
             s5200 = min(d5200.sell_orders.keys()) - max(d5200.buy_orders.keys())
             s5300 = min(d5300.sell_orders.keys()) - max(d5300.buy_orders.keys())
             tight_surface = (s5200 <= 2) and (s5300 <= 2)
-        VOUCHER_EDGES = VOUCHER_EDGES_TIGHT if tight_surface else VOUCHER_EDGES_WIDE
+        VOUCHER_EDGES = VOUCHER_EDGES_WIDE  # n65 always-WIDE
 
         # v85r: BUY-aggressor detection on VELVET. When market_trades has
         # a buy-aggressor print (price > prev mid), set 5-tick cooldown
@@ -481,14 +588,32 @@ class Trader:
         if s.velvet_ask_cooldown > 0:
             s.velvet_ask_cooldown -= 1
 
+        # nN32: HYDROGEL imb conditional skip flags
+        skip_hydro_ask = False
+        skip_hydro_bid = False
+        depth_hydro = state.order_depths.get("HYDROGEL_PACK")
+        if depth_hydro and depth_hydro.buy_orders and depth_hydro.sell_orders:
+            hbb = max(depth_hydro.buy_orders); hba = min(depth_hydro.sell_orders)
+            hbbv = depth_hydro.buy_orders[hbb]; hbav = -depth_hydro.sell_orders[hba]
+            hd = hbbv + hbav
+            if hd > 0:
+                himb = hbbv / hd
+                if himb >= 0.55: skip_hydro_ask = True
+                elif himb <= 0.45: skip_hydro_bid = True
+
 
         # v145: voucher inventory throttle on TAKE entries (from v141_invtt)
+        # n51/n62: keep wings (6000/6500) in DENOMINATOR (per n37: -$109K when
+        # excluded) but EXCLUDE from NUMERATOR so dead-wing carry doesn't trip
+        # the throttle.
         INVTT_F = 0.72  # v142 finding: 0.69 better than 0.75 on this base
         voucher_pos_total = 0
         voucher_limit_total = 0
         for prod_name in POS_LIMIT:
             if prod_name.startswith("VEV_"):
-                voucher_pos_total += abs(state.position.get(prod_name, 0))
+                strike_n = int(prod_name.split("_")[1])
+                if strike_n not in VEV_PINNED_STRIKES:
+                    voucher_pos_total += abs(state.position.get(prod_name, 0))
                 voucher_limit_total += POS_LIMIT[prod_name]
         inv_frac = voucher_pos_total / voucher_limit_total if voucher_limit_total > 0 else 0.0
         take_scale = max(0.0, 1.0 - inv_frac) if inv_frac > INVTT_F else 1.0
@@ -511,8 +636,11 @@ class Trader:
                             else:
                                 orders = [Order(product, ba, -current_pos)]
                 else:
-                    skip_ask = (product == "VELVETFRUIT_EXTRACT" and skip_velvet_ask)
+                    skip_ask = (product == "VELVETFRUIT_EXTRACT" and skip_velvet_ask) or (product == "HYDROGEL_PACK" and skip_hydro_ask)
                     orders = delta1_orders(product, depth, current_pos, budget, FV_ANCHOR[product], tight_surface, skip_ask)
+                    # nN32: post-process to skip BID for HYDRO when imb low
+                    if product == "HYDROGEL_PACK" and skip_hydro_bid:
+                        orders = [o for o in orders if o.quantity < 0]
             elif product.startswith("VEV_"):
                 try:
                     strike = int(product[4:])
@@ -529,9 +657,9 @@ class Trader:
                     bb_v_, ba_v_, _, _ = best_bid_ask(depth)
                     if bb_v_ is not None and ba_v_ is not None:
                         v_edge = VOUCHER_EDGES.get(strike, 5)
-                        if bb_v_ >= VOUCHER_ANCHOR_SELL[strike] + v_edge:
+                        if bb_v_ >= VOUCHER_ANCHOR_SELL[strike] + v_edge and not guard_high_active:
                             voucher_take_sell = True
-                        elif ba_v_ <= VOUCHER_ANCHOR_BUY[strike] - v_edge:
+                        elif ba_v_ <= VOUCHER_ANCHOR_BUY[strike] - v_edge and not guard_low_active:
                             voucher_take_buy = True
                 if not (voucher_take_sell or voucher_take_buy) and (velvet_imb_take_sell or velvet_imb_take_buy):
                     bb_, ba_, _, _ = best_bid_ask(depth)
@@ -546,6 +674,8 @@ class Trader:
                             vol = -depth.sell_orders[ba_]
                             qty = min(vol, budget - current_pos, 30)
                             qty = int(qty * take_scale)
+                            if strike in DRIFT_GUARD_STRIKES:
+                                qty = int(qty * guard_buy_scale)
                             if qty > 0:
                                 orders = [Order(product, ba_, qty)]
                 if voucher_take_sell or voucher_take_buy:
@@ -561,6 +691,8 @@ class Trader:
                             vol = -depth.sell_orders[ba_]
                             qty = min(vol, budget - current_pos, 600)  # v85aa
                             qty = int(qty * take_scale)
+                            if strike in DRIFT_GUARD_STRIKES:
+                                qty = int(qty * guard_buy_scale)
                             if qty > 0:
                                 orders = [Order(product, ba_, qty)]
                 elif strike in VEV_PASSIVE_MM_STRIKES:
@@ -589,7 +721,7 @@ class Trader:
         # n9: Mark 22 sell anticipation. Post bid at bb+1 (queue priority over
         # the bot's bid quote) on positive-EV strikes (5200/5300/5400). Triggered
         # only when Mark 22 sold this strike this tick. Hold via v148 exit logic.
-        for sym in ("VEV_5400", "VEV_5500"):
+        for sym in ("VEV_5400",):  # nN120: drop 5500 (M22 99% right → wrong direction to fade)
             trades_sym = state.market_trades.get(sym, [])
             mark22_sold = any(t.seller == "Mark 22" for t in trades_sym)
             if not mark22_sold:
@@ -609,13 +741,13 @@ class Trader:
             existing_sell = sum(-o.quantity for o in existing if o.quantity < 0)
             extra_pair: List[Order] = []
             buy_room = max(limit - current_pos - existing_buy, 0)
-            qty_b = min(15, buy_room)
+            qty_b = int(min(200, buy_room) * guard_buy_scale)
             if qty_b > 0:
                 extra_pair.append(Order(sym, bb + 1, qty_b))
             # n16: when long inventory exists, also add ASK at ba-1 for exit
             if current_pos > 0:
                 sell_room = max(limit + current_pos - existing_sell, 0)
-                qty_s = min(current_pos, sell_room, 15)
+                qty_s = min(current_pos, sell_room, 200)
                 if qty_s > 0:
                     extra_pair.append(Order(sym, ba - 1, -qty_s))
             if extra_pair:
@@ -665,6 +797,142 @@ class Trader:
                         add.append(Order("VELVETFRUIT_EXTRACT", ba_v - 1, -qty))
                 if add:
                     result["VELVETFRUIT_EXTRACT"] = list(existing_v) + add
+
+        # n41: add Mark 14 SELL → bid bb+1 (mirror of n14b's BUY → ask).
+        # Mark 14 sells VELV at ask (he's a maker selling to aggressive buyers like
+        # Mark 55 / Mark 67). After his sell, recovery flow comes from sellers, our bid
+        # at bb+1 catches the next bid-side flow.
+        if any(t.seller == "Mark 14" for t in v_trades):
+            depth_v = state.order_depths.get("VELVETFRUIT_EXTRACT")
+            if depth_v and depth_v.buy_orders and depth_v.sell_orders:
+                bb_v = max(depth_v.buy_orders)
+                ba_v = min(depth_v.sell_orders)
+                if bb_v + 1 < ba_v:
+                    cp_v = state.position.get("VELVETFRUIT_EXTRACT", 0)
+                    lim_v = POS_LIMIT.get("VELVETFRUIT_EXTRACT", 0)
+                    existing_v = result.get("VELVETFRUIT_EXTRACT", [])
+                    existing_buy_v = sum(o.quantity for o in existing_v if o.quantity > 0)
+                    room = max(lim_v - cp_v - existing_buy_v, 0)
+                    qty = min(15, room)
+                    if qty > 0:
+                        result["VELVETFRUIT_EXTRACT"] = list(existing_v) + [Order("VELVETFRUIT_EXTRACT", bb_v + 1, qty)]
+
+
+        # nM67voucher: extend Mark 67 prophet to vouchers (positive-delta strikes).
+        if m67_buy or m67_sell:
+            for K_v in (5000, 5100, 5200, 5300, 5400):
+                sym_v = f"VEV_{K_v}"
+                d_k = state.order_depths.get(sym_v)
+                if not d_k or not d_k.buy_orders or not d_k.sell_orders:
+                    continue
+                bb_k = max(d_k.buy_orders); ba_k = min(d_k.sell_orders)
+                if bb_k + 1 >= ba_k: continue
+                cp_k = state.position.get(sym_v, 0)
+                lim_k = POS_LIMIT.get(sym_v, 0)
+                ex = result.get(sym_v, [])
+                ex_buy = sum(o.quantity for o in ex if o.quantity > 0)
+                ex_sell = sum(-o.quantity for o in ex if o.quantity < 0)
+                extra = []
+                if m67_buy:
+                    room = max(lim_k - cp_k - ex_buy, 0)
+                    q = min(15, room)
+                    if q > 0: extra.append(Order(sym_v, bb_k + 1, q))
+                if m67_sell:
+                    room = max(lim_k + cp_k - ex_sell, 0)
+                    q = min(15, room)
+                    if q > 0: extra.append(Order(sym_v, ba_k - 1, -q))
+                if extra:
+                    result[sym_v] = list(ex) + extra
+
+
+        # nV_sticky: keep voucher cross-bias active for 10 ticks after Mark 67.
+        # Currently the m67_buy/sell only fires on the tick of the trade — extend with state.
+        if any(t.buyer == "Mark 67" for t in v_trades):
+            s.m67_stick = 75
+        if s.m67_stick > 0:
+            s.m67_stick -= 1
+            for K_vs in (5000, 5100, 5200, 5300, 5400):
+                sym_vs = f"VEV_{K_vs}"
+                d_vs = state.order_depths.get(sym_vs)
+                if not d_vs or not d_vs.buy_orders or not d_vs.sell_orders:
+                    continue
+                bb_vs = max(d_vs.buy_orders); ba_vs = min(d_vs.sell_orders)
+                if bb_vs + 1 >= ba_vs: continue
+                cp_vs = state.position.get(sym_vs, 0)
+                lim_vs = POS_LIMIT.get(sym_vs, 0)
+                ex_vs = result.get(sym_vs, [])
+                ex_b_vs = sum(o.quantity for o in ex_vs if o.quantity > 0)
+                room_vs = max(lim_vs - cp_vs - ex_b_vs, 0)
+                q_vs = min(50, room_vs)
+                if q_vs > 0:
+                    result[sym_vs] = list(ex_vs) + [Order(sym_vs, bb_vs + 1, q_vs)]
+
+        # nN15: late-day BUY wind-down. In last 1000 ticks (s.tick > 9000),
+        # scale all voucher BUY orders by 0.3.
+        if s.tick > 9500:
+            LATE_BUY_SCALE = 0.0
+            for sym_l in list(result.keys()):
+                if not sym_l.startswith("VEV_"):
+                    continue
+                scaled_l: List[Order] = []
+                for o_l in result[sym_l]:
+                    if o_l.quantity > 0:
+                        q_l = int(o_l.quantity * LATE_BUY_SCALE)
+                        if q_l > 0:
+                            scaled_l.append(Order(sym_l, o_l.price, q_l))
+                    else:
+                        scaled_l.append(o_l)
+                result[sym_l] = scaled_l
+
+        # nN33: imb-conditional skip on vouchers (5000-5400). Compute per-strike imb,
+        # filter out the wrong-side orders.
+        for K_n33 in (5000, 5100, 5200, 5300, 5400):
+            sym_n33 = f"VEV_{K_n33}"
+            d_n33 = state.order_depths.get(sym_n33)
+            if not d_n33 or not d_n33.buy_orders or not d_n33.sell_orders: continue
+            bb_n33 = max(d_n33.buy_orders); ba_n33 = min(d_n33.sell_orders)
+            bbv_n33 = d_n33.buy_orders[bb_n33]; bav_n33 = -d_n33.sell_orders[ba_n33]
+            denom_n33 = bbv_n33 + bav_n33
+            if denom_n33 <= 0: continue
+            imb_n33 = bbv_n33 / denom_n33
+            if imb_n33 >= 0.75:
+                # forward UP — drop ASKS
+                if sym_n33 in result:
+                    result[sym_n33] = [o for o in result[sym_n33] if o.quantity > 0]
+            elif imb_n33 <= 0.25:
+                # forward DOWN — drop BIDS
+                if sym_n33 in result:
+                    result[sym_n33] = [o for o in result[sym_n33] if o.quantity < 0]
+
+        # nP1: scale BUY size on strikes where sell-flow dominates.
+        # Threshold: total flow ≥ 3, sell-pct ≥ 0.75 → buy_scale 0.5.
+        # Symmetric: buy-pct ≥ 0.75 → sell_scale 0.5.
+        for sym in list(result.keys()):
+            if not sym.startswith("VEV_"):
+                continue
+            ab = s.agg_buy.get(sym, 0.0)
+            asl = s.agg_sell.get(sym, 0.0)
+            tot = ab + asl
+            if tot < 3.0:
+                continue
+            sell_pct = asl / tot
+            buy_scale = 0.3 if sell_pct >= 0.5 else 1.0
+            sell_scale = 0.3 if (1.0 - sell_pct) >= 0.5 else 1.0
+            if buy_scale == 1.0 and sell_scale == 1.0:
+                continue
+            scaled: List[Order] = []
+            for o in result[sym]:
+                if o.quantity > 0 and buy_scale < 1.0:
+                    q = int(o.quantity * buy_scale)
+                    if q > 0:
+                        scaled.append(Order(sym, o.price, q))
+                elif o.quantity < 0 and sell_scale < 1.0:
+                    q = int(-o.quantity * sell_scale)
+                    if q > 0:
+                        scaled.append(Order(sym, o.price, -q))
+                else:
+                    scaled.append(o)
+            result[sym] = scaled
 
         trader_data = s.to_json()
         return result, 0, trader_data

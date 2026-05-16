@@ -5,13 +5,29 @@ Products: **ASH_COATED_OSMIUM** (OSM, mean-reverting, FV ≈ 10001) and
 **INTARIAN_PEPPER_ROOT** (PEP, drift FV: day_start + 0.10·tick, day_start
 ∈ {11000, 12000, 13000}).
 
-## Best performing strategies (both preserved in `ROUND_1/`)
+## Best performing strategies
 
 | File | Server PnL | Notes |
 |---|---:|---|
-| `R1Final/273632/273632.py` (v82_hardened) | **$101,199.69** on 1d × 10k ticks | Final official R1 submission. 81% of PnL from PEP drift. |
-| `strategies/trader_v100_scratch.py` | 10,732.47 on 1d × 1k | +11 over 127989 in MC; matches v74/DRO. |
-| `strategies/trader_safe_10721.py` (sub 127989) | 10,721 | The training-data champion; multiple submissions confirmed market is deterministic across submissions (only PnL differs). |
+| `strategies/244644.py` (v82_hardened) | **$10,859** on 1d × 1k ticks | End-of-round preserved submission. OSM $3,279 + PEPPER $7,580 (PEP ≈ 70%). Log + tradeHistory preserved in `244644.log` / `244644.json`. |
+| `strategies/trader_safe_10721.py` (sub 127989) | $10,721 | Training-data champion. Multiple submissions confirmed the server market is deterministic across submissions; only PnL differs. |
+
+An earlier scoring run on v82_hardened (sub 273632, not preserved on
+disk) reportedly produced $101,199.69 on a 1-day × 10k-tick session.
+The 10× ratio matches the tick-count ratio against the preserved
+1k-tick log; use the 1k figure when comparing across R2–R4.
+
+### Trade breakdown — sub 244644
+
+- **OSMIUM:** 92 fills, 270 bought / 231 sold over the day. Net long
+  ~39 going into the close. PnL = $3,279 from passive MM net of
+  the deterministic OSM taker schedule.
+- **PEPPER:** 41 fills, 120 bought / 40 sold. Net long ~80 — the
+  drift position is the position, not a by-product of MM. PnL = $7,580.
+
+Counterparty fields (`buyer` / `seller`) are blank in R1, so post-hoc
+counterparty analysis is not possible on this log. The R4 retroactive
+disclosure should populate them in the R1 Data Capsule if revisited.
 
 The local MC backtester lives in `ROUND_1/mc/` — calibrated to ρ=1.0
 Spearman rank vs server across 4 submitted strategies.
