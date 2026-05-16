@@ -2,7 +2,6 @@
 
 **Season:** Spring 2026 (Prosperity 4), all five rounds completed.
 **Final placement:** 152nd overall.
-**Author:** Sourabh Velaga.
 
 This document records the methodology, results, and validated negative
 results from the season. It is intended as a reference for future
@@ -267,4 +266,4 @@ The sub-agent topology itself is reusable. The selection criterion
    evidence against the server. R1's ρ = 1.0 was earned across four
    submissions, not assumed.
 
-— Sourabh, May 2026
+May 2026

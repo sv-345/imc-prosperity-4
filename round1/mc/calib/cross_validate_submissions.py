@@ -20,10 +20,10 @@ from synth_replay import _load_trader_from_path
 
 
 SUBS = {
-    "110534":  "/Users/svelaga/Documents/IMC Prosperity/ROUND_1/submissions/110534/110534.py",
-    "113620":  "/Users/svelaga/Documents/IMC Prosperity/ROUND_1/submissions/113620/113620.py",
-    "114525":  "/Users/svelaga/Documents/IMC Prosperity/ROUND_1/submissions/114525/114525.py",
-    "127989":  "/Users/svelaga/Documents/IMC Prosperity/ROUND_1/submissions/127989/127989.py",
+    "110534":  "<repo>/ROUND_1/submissions/110534/110534.py",
+    "113620":  "<repo>/ROUND_1/submissions/113620/113620.py",
+    "114525":  "<repo>/ROUND_1/submissions/114525/114525.py",
+    "127989":  "<repo>/ROUND_1/submissions/127989/127989.py",
 }
 
 SERVER_PNL = {

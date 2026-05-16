@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from synth_replay import _load_trader_from_path, run_session
 
 
-SUBMISSION_127989 = ("/Users/svelaga/Documents/IMC Prosperity/"
+SUBMISSION_127989 = ("<repo>/"
                      "ROUND_1/submissions/127989/127989.py")
 
 TRUTH = {

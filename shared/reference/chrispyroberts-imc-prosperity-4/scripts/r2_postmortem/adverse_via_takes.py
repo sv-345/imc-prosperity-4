@@ -14,7 +14,7 @@ import math
 from collections import defaultdict
 from pathlib import Path
 
-LEDGER = Path("/Users/svelaga/Documents/IMC Prosperity/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem/ledger_all.csv")
+LEDGER = Path("<repo>/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem/ledger_all.csv")
 LOGS = {
     "296317": "/tmp/prosperity_logs/296317/305226.log",
     "296379": "/tmp/prosperity_logs/296379/305289.log",

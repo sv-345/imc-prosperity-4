@@ -22,7 +22,7 @@ LOGS = {
     "297226": "/tmp/prosperity_logs/297226/306138.log",   # iter14
 }
 
-OUT = Path("/Users/svelaga/Documents/IMC Prosperity/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem")
+OUT = Path("<repo>/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem")
 
 
 def parse_mids(log: dict) -> dict[tuple[int, str], float]:

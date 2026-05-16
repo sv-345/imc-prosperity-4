@@ -25,9 +25,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from synth_replay import _load_trader_from_path, run_session
 
 
-P127989 = ("/Users/svelaga/Documents/IMC Prosperity/"
+P127989 = ("<repo>/"
            "ROUND_1/submissions/127989/127989.py")
-V15 = ("/Users/svelaga/Documents/IMC Prosperity/"
+V15 = ("<repo>/"
        "ROUND_1/submissions/v15_wall_aware/v15_wall_aware.py")
 
 OSM_PARAMS = {"taker_rate": 0.140, "qty_range": (2, 8)}

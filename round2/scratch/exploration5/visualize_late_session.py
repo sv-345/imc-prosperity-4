@@ -91,7 +91,7 @@ def main():
         height=900,
         legend=dict(orientation='h')
     )
-    out = pathlib.Path('/Users/svelaga/Documents/IMC Prosperity/exploration5/viz_iter26_best.html')
+    out = pathlib.Path('<repo>/exploration5/viz_iter26_best.html')
     fig.write_html(out, include_plotlyjs='cdn')
     print(f"wrote {out}")
 

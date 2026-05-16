@@ -7,7 +7,7 @@ Branch: `prosperity4-round3`.
 ## What's patched
 
 1. `prosperity3bt/data.py:LIMITS` — replaced with the 12 P4R3 products and their position limits (HYDROGEL=200, VELVETFRUIT=200, all 10 vouchers=300). See `P4R3_SPEC.md` for sources.
-2. `prosperity3bt/resources/round3/*.csv` — replaced with P4R3 historical data (10k ticks/day × 3 days), copied from `/Users/svelaga/Documents/IMCProsperityR3/ROUND_3/`.
+2. `prosperity3bt/resources/round3/*.csv` — replaced with P4R3 historical data (10k ticks/day × 3 days), copied from `<legacy-r3>/ROUND_3/`.
 3. `example/starter.py`, `example/oversized_trader.py` — minimal traders for smoke testing.
 
 Engine internals are untouched. The match-orders semantics, position-limit enforcement, and TradingState construction all carry over from the upstream P3 backtester unchanged. CSV schema between P3 round 3 and P4R3 is byte-identical (only `currency` column value differs, and the engine doesn't read it).
@@ -17,18 +17,18 @@ See `NOTES_FORK.md` for the upstream-source audit and `P4R3_SPEC.md` for the loc
 ## Setup
 
 ```sh
-cd "/Users/svelaga/Documents/IMC Prosperity/prosperity3bt-fork"
+cd "<repo>/prosperity3bt-fork"
 uv venv
 uv sync
 ```
 
-Trader files at `/Users/svelaga/Documents/IMCProsperityR3/trader_r3_v*.py` use the bare `from datamodel import ...` style required by the IMC server. For the backtester to resolve that import, a copy of the engine's datamodel is placed at `/Users/svelaga/Documents/IMCProsperityR3/datamodel.py`. The backtester adds the trader's parent directory to `sys.path`, so the bare import resolves there.
+Trader files at `<legacy-r3>/trader_r3_v*.py` use the bare `from datamodel import ...` style required by the IMC server. For the backtester to resolve that import, a copy of the engine's datamodel is placed at `<legacy-r3>/datamodel.py`. The backtester adds the trader's parent directory to `sys.path`, so the bare import resolves there.
 
 ## Usage
 
 ```sh
 # Backtest v83 across all 3 R3 days (recommended)
-uv run prosperity3bt /Users/svelaga/Documents/IMCProsperityR3/trader_r3_v83.py 3 --merge-pnl --no-out --no-progress
+uv run prosperity3bt <legacy-r3>/trader_r3_v83.py 3 --merge-pnl --no-out --no-progress
 
 # Single day
 uv run prosperity3bt <trader.py> 3-0   # day 0 only

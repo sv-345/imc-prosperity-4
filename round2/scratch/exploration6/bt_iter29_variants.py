@@ -2,7 +2,7 @@
 import sys, importlib
 from pathlib import Path
 
-ROOT = Path("/Users/svelaga/Documents/IMC Prosperity")
+ROOT = Path("<repo>")
 BT_ROOT = ROOT / "chrispyroberts-imc-prosperity-4/backtester"
 DATA_ROOT = ROOT / "chrispyroberts-imc-prosperity-4/data"
 sys.path.insert(0, str(BT_ROOT))

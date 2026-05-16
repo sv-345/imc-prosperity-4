@@ -1,7 +1,7 @@
 {
   "kind": "monte_carlo_dashboard",
   "meta": {
-    "algorithmPath": "/Users/svelaga/Documents/IMC Prosperity/research_org/researchers/project_latent_fv_kalman/phase_b/b1_variants/V5_pep_only_kalman.py",
+    "algorithmPath": "<repo>/research_org/researchers/project_latent_fv_kalman/phase_b/b1_variants/V5_pep_only_kalman.py",
     "sessionCount": 100,
     "bandSessionCount": 0,
     "fvMode": "simulate",

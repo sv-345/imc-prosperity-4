@@ -21,7 +21,7 @@ def load(path):
     return rows
 
 
-BASE = Path("/Users/svelaga/Documents/IMC Prosperity/research_org/researchers/project_latent_fv_kalman/phase_b/b1_mc_results")
+BASE = Path("<repo>/research_org/researchers/project_latent_fv_kalman/phase_b/b1_mc_results")
 v0a = load(BASE / "V0_iter23_baseline.csv")
 v5a = load(BASE / "V5_pep_only_kalman.csv")
 v0b = load(BASE / "V0_iter23_baseline_seed2.csv")

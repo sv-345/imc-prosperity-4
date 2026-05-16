@@ -22,14 +22,14 @@ import statistics
 from collections import defaultdict, Counter
 from pathlib import Path
 
-R1_LOG = "/Users/svelaga/Documents/IMC Prosperity/ROUND_1/R1Final/273632/273632.log"
+R1_LOG = "<repo>/ROUND_1/R1Final/273632/273632.log"
 R2_LOGS = {
     "296317": "/tmp/prosperity_logs/296317/305226.log",
     "296379": "/tmp/prosperity_logs/296379/305289.log",
     "296878": "/tmp/prosperity_logs/296878/305790.log",
     "297226": "/tmp/prosperity_logs/297226/306138.log",
 }
-OUT_DIR = Path("/Users/svelaga/Documents/IMC Prosperity/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem")
+OUT_DIR = Path("<repo>/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem")
 
 
 def parse_activities(log: dict) -> dict[tuple[int, str], dict]:

@@ -1,6 +1,6 @@
 # Round 2 — Self Post-mortem: Leak Categories
 
-Source: /Users/svelaga/Documents/IMC Prosperity/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem/ledger_all.csv. 367 fills across 4 v82-family submissions (iter 12 run 1, iter 12 run 2, iter 13, iter 14). Averaged to per-submission-slice ($/slice = total / n_subs).
+Source: <repo>/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem/ledger_all.csv. 367 fills across 4 v82-family submissions (iter 12 run 1, iter 12 run 2, iter 13, iter 14). Averaged to per-submission-slice ($/slice = total / n_subs).
 
 ## Edge-at-fill × markout profile
 

@@ -22,7 +22,7 @@ import os
 from collections import defaultdict
 from pathlib import Path
 
-ROOT = Path("/Users/svelaga/Documents/IMC Prosperity")
+ROOT = Path("<repo>")
 BT_ROOT = ROOT / "chrispyroberts-imc-prosperity-4/backtester"
 DATA_ROOT = ROOT / "chrispyroberts-imc-prosperity-4/data"
 ALGO = ROOT / "exploration4/iter25_tb1.py"

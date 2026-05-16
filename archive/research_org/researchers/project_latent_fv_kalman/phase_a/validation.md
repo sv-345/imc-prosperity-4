@@ -442,7 +442,7 @@ Allocator routing to Phase B.**
 Run:
 
 ```
-cd /Users/svelaga/Documents/IMC\ Prosperity
+cd /Users/<user>/Documents/IMC\ Prosperity
 python3 research_org/researchers/project_latent_fv_kalman/phase_a/_a3_validation.py
 ```
 

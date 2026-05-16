@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 def main():
-    log_path = ("/Users/svelaga/Documents/IMC Prosperity/"
+    log_path = ("<repo>/"
                 "ROUND_1/submissions/127989/127989.log")
     out_path = Path(__file__).parent.parent.parent / "data" / "calib" / "127989_market_trades.json"
 

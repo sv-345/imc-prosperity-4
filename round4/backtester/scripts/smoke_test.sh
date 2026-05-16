@@ -8,7 +8,7 @@
 set -euo pipefail
 
 FORK_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-R3_DIR="/Users/svelaga/Documents/IMCProsperityR3"
+R3_DIR="<legacy-r3>"
 TRADER_V83="$R3_DIR/trader_r3_v83.py"
 
 cd "$FORK_DIR"

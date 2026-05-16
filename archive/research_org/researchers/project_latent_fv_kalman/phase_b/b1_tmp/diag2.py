@@ -29,7 +29,7 @@ def inner_mid_osm(row):
     return None
 
 
-path = Path("/Users/svelaga/Documents/IMC Prosperity/research_org/researchers/project_latent_fv_kalman/phase_b/b1_tmp/V0_iter23/sessions/session_00000/round2/prices_round_2_day_-1.csv")
+path = Path("<repo>/research_org/researchers/project_latent_fv_kalman/phase_b/b1_tmp/V0_iter23/sessions/session_00000/round2/prices_round_2_day_-1.csv")
 filt = LatentFVKalman.cold_osm()
 init = False
 ys = []

@@ -14,7 +14,7 @@ Fork of [`jmerle/imc-prosperity-3-backtester`](https://github.com/jmerle/imc-pro
 ## Install
 
 ```bash
-cd /Users/svelaga/Documents/IMCR4/backtester
+cd <legacy-r4>/backtester
 uv pip install -e .
 ```
 

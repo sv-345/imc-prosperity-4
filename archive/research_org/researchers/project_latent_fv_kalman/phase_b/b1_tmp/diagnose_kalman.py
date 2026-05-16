@@ -65,7 +65,7 @@ def replay_session(prices_csv: Path):
 
 
 def main():
-    session_base = Path("/Users/svelaga/Documents/IMC Prosperity/research_org/researchers/project_latent_fv_kalman/phase_b/b1_tmp/V0_iter23/sessions")
+    session_base = Path("<repo>/research_org/researchers/project_latent_fv_kalman/phase_b/b1_tmp/V0_iter23/sessions")
     sess_dirs = sorted([p for p in session_base.iterdir() if p.is_dir()])
     print(f"Found {len(sess_dirs)} session dirs")
     for sd in sess_dirs:

@@ -23,7 +23,7 @@ import os
 c4_dir = Path("/tmp/prosperity_logs/316247")
 if not c4_dir.exists():
     # download it
-    os.system(f'python3 "/Users/svelaga/Documents/IMC Prosperity/TUTORIAL_ROUND_1/tools/prosperity_api.py" logs --id 316247')
+    os.system(f'python3 "<repo>/TUTORIAL_ROUND_1/tools/prosperity_api.py" logs --id 316247')
     c4_dir = Path("/tmp/prosperity_logs/316247")
 
 c4_log = next(c4_dir.glob("*.log"))

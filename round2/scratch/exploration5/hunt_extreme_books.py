@@ -6,7 +6,7 @@ import pathlib
 import pandas as pd
 import numpy as np
 
-DATA = pathlib.Path("/Users/svelaga/Documents/IMC Prosperity/ROUND_2")
+DATA = pathlib.Path("<repo>/ROUND_2")
 
 
 def main():

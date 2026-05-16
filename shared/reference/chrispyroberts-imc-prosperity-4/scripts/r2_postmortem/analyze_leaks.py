@@ -13,8 +13,8 @@ import math
 from collections import defaultdict, Counter
 from pathlib import Path
 
-LEDGER_CSV = Path("/Users/svelaga/Documents/IMC Prosperity/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem/ledger_all.csv")
-DOC = Path("/Users/svelaga/Documents/IMC Prosperity/chrispyroberts-imc-prosperity-4/docs/round2_postmortem/leaks.md")
+LEDGER_CSV = Path("<repo>/chrispyroberts-imc-prosperity-4/scripts/r2_postmortem/ledger_all.csv")
+DOC = Path("<repo>/chrispyroberts-imc-prosperity-4/docs/round2_postmortem/leaks.md")
 
 
 def load() -> list[dict]:

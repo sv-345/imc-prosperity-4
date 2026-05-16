@@ -72,7 +72,7 @@ def extract_market_trades(logs):
 
 
 def extract_session(sid):
-    log_path = f"/Users/svelaga/Documents/IMC Prosperity/ROUND_1/submissions/{sid}/{sid}.log"
+    log_path = f"<repo>/ROUND_1/submissions/{sid}/{sid}.log"
     log = json.loads(Path(log_path).read_text())
     acts = parse_activities_log(log['activitiesLog'])
     mts = extract_market_trades(log['logs'])

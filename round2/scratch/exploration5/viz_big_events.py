@@ -7,7 +7,7 @@ import numpy as np
 import plotly.graph_objects as go
 
 LOG = pathlib.Path('/tmp/prosperity_logs/303257/312201.json')
-DATA = pathlib.Path('/Users/svelaga/Documents/IMC Prosperity/ROUND_2')
+DATA = pathlib.Path('<repo>/ROUND_2')
 
 
 def main():
@@ -58,7 +58,7 @@ def main():
         yaxis2=dict(title='iter23 PnL', side='right', overlaying='y'),
         height=700,
     )
-    out = pathlib.Path('/Users/svelaga/Documents/IMC Prosperity/exploration5/viz_osm_jumps.html')
+    out = pathlib.Path('<repo>/exploration5/viz_osm_jumps.html')
     fig.write_html(out, include_plotlyjs='cdn')
     print(f"wrote {out}")
 

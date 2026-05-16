@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parent
 ART = ROOT / "artifacts"
 ART.mkdir(parents=True, exist_ok=True)
 
-LOG = Path("/Users/svelaga/Documents/IMC Prosperity/ROUND_1/R1Final/273632/273632.log")
+LOG = Path("<repo>/ROUND_1/R1Final/273632/273632.log")
 
 
 def main() -> None:
@@ -59,7 +59,7 @@ def main() -> None:
                 w.writerow([t["timestamp"], t["symbol"], "SELL", t["price"], t["quantity"]])
 
     # 4. graphLog (from 273632.json) -> graph_pnl.csv
-    jf = Path("/Users/svelaga/Documents/IMC Prosperity/ROUND_1/R1Final/273632/273632.json")
+    jf = Path("<repo>/ROUND_1/R1Final/273632/273632.json")
     if jf.exists():
         with jf.open() as f:
             jd = json.load(f)

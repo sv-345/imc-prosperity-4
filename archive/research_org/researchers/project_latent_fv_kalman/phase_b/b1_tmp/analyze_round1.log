@@ -41,4 +41,4 @@
   day +0: n=33  mean_diff=-557.74  CI=[-729.65,-385.84]
   day +1: n=33  mean_diff=-492.10  CI=[-672.63,-311.57]
 
-Wrote summary to /Users/svelaga/Documents/IMC Prosperity/research_org/researchers/project_latent_fv_kalman/phase_b/b1_mc_results/_summary.csv
+Wrote summary to <repo>/research_org/researchers/project_latent_fv_kalman/phase_b/b1_mc_results/_summary.csv

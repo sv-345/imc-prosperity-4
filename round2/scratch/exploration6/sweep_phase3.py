@@ -6,7 +6,7 @@ import sys, os, importlib
 from pathlib import Path
 from collections import defaultdict
 
-ROOT = Path("/Users/svelaga/Documents/IMC Prosperity")
+ROOT = Path("<repo>")
 BT_ROOT = ROOT / "chrispyroberts-imc-prosperity-4/backtester"
 DATA_ROOT = ROOT / "chrispyroberts-imc-prosperity-4/data"
 

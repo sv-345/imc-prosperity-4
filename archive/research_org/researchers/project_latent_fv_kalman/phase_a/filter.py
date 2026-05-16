@@ -660,7 +660,7 @@ def _serialization_roundtrip_test() -> Tuple[int, bool]:
 
 
 def run_validation(
-    data_dir: str = "/Users/svelaga/Documents/IMC Prosperity/ROUND_2",
+    data_dir: str = "<repo>/ROUND_2",
     tol: float = 0.05,
 ) -> bool:
     """Run all validation checks; return True on full pass."""

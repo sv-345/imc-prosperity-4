@@ -38,7 +38,7 @@ from filter import (  # noqa: E402
     load_prices_csv,
 )
 
-DATA_DIR = "/Users/svelaga/Documents/IMC Prosperity/ROUND_2"
+DATA_DIR = "<repo>/ROUND_2"
 
 # ---------------------------------------------------------------------------
 # Helpers

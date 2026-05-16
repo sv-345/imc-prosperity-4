@@ -160,8 +160,8 @@ def compare(path_a, name_a, path_b, name_b, product, n_seeds=50):
 
 
 if __name__ == "__main__":
-    P127989 = "/Users/svelaga/Documents/IMC Prosperity/ROUND_1/submissions/127989/127989.py"
-    V15 = "/Users/svelaga/Documents/IMC Prosperity/ROUND_1/submissions/v15_wall_aware/v15_wall_aware.py"
+    P127989 = "<repo>/ROUND_1/submissions/127989/127989.py"
+    V15 = "<repo>/ROUND_1/submissions/v15_wall_aware/v15_wall_aware.py"
     print("Server ground-truth PnL: 127989 OSM=3144 PEP=7577; v15 OSM=2983 PEP=7577")
     compare(P127989, "127989", V15, "v15", "ASH_COATED_OSMIUM", n_seeds=50)
     compare(P127989, "127989", V15, "v15", "INTARIAN_PEPPER_ROOT", n_seeds=50)

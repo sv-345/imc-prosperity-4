@@ -27,7 +27,7 @@ LOGS = {
     "296878": "/tmp/prosperity_logs/296878/305790.log",
     "297226": "/tmp/prosperity_logs/297226/306138.log",
 }
-OUT = Path("/Users/svelaga/Documents/IMC Prosperity/chrispyroberts-imc-prosperity-4/docs/round2_postmortem/features.md")
+OUT = Path("<repo>/chrispyroberts-imc-prosperity-4/docs/round2_postmortem/features.md")
 
 
 def parse_log(path: str):

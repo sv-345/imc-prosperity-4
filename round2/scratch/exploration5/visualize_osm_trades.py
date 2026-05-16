@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
-DATA = pathlib.Path("/Users/svelaga/Documents/IMC Prosperity/ROUND_2")
+DATA = pathlib.Path("<repo>/ROUND_2")
 
 
 def main():
@@ -41,7 +41,7 @@ def main():
     fig.update_layout(title='OSM mid + trades colored by offset from rolling mid',
                       xaxis_title='timestamp', yaxis_title='price',
                       height=700)
-    out = pathlib.Path('/Users/svelaga/Documents/IMC Prosperity/exploration5/viz_osm_trades.html')
+    out = pathlib.Path('<repo>/exploration5/viz_osm_trades.html')
     fig.write_html(out, include_plotlyjs='cdn')
     print(f"wrote {out}")
 

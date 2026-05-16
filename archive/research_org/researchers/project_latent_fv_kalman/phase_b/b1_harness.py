@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 HERE = Path(__file__).resolve().parent
-ROOT = Path("/Users/svelaga/Documents/IMC Prosperity")
+ROOT = Path("<repo>")
 MCBT_DIR = ROOT / "chrispyroberts-imc-prosperity-4" / "backtester"
 VARIANTS_DIR = HERE / "b1_variants"
 RESULTS_DIR = HERE / "b1_mc_results"

@@ -102,7 +102,7 @@ This is a **fidelity gap** to track in Phase 4: if the server liquidates open in
 
 ## Available historical data
 
-`/Users/svelaga/Documents/IMCProsperityR3/ROUND_3/`:
+`<legacy-r3>/ROUND_3/`:
 - `prices_round_3_day_0.csv`, `trades_round_3_day_0.csv` (TTE=8d data)
 - `prices_round_3_day_1.csv`, `trades_round_3_day_1.csv` (TTE=7d data)
 - `prices_round_3_day_2.csv`, `trades_round_3_day_2.csv` (TTE=6d data)

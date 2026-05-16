@@ -338,7 +338,7 @@ def summarize(results: list[SessionResult], name: str = ""):
 
 
 if __name__ == "__main__":
-    path = ("/Users/svelaga/Documents/IMC Prosperity/ROUND_1/"
+    path = ("<repo>/ROUND_1/"
             "submissions/v15_wall_aware/v15_wall_aware.py")
     trader = _load_trader_from_path(path)
     osm = [run_session(trader, "ASH_COATED_OSMIUM", seed=s) for s in range(20)]
